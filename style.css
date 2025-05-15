@@ -1,0 +1,366 @@
+/* Réinitialisation et styles de base */
+html, body {
+    background: #e0e4e8;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 10px; /* Base pour conversion facile mm -> px si besoin, mais mm est mieux pour la précision */
+}
+
+.a4-paysage {
+    width: 297mm;
+    height: 210mm;
+    margin: 10px auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+
+.a5-volet {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+    padding: 2mm;
+}
+
+.a5-volet:first-child {
+    border-right: 0.5mm dashed #b0b0b0;
+}
+
+.pliage-indic {
+    position: absolute;
+    left: 50%; top: 0;
+    width: 0; height: 100%;
+    border-left: 0.5mm dashed #b0b0b0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.bloc {
+    background: #fff;
+    border: 0.4mm solid #2d396b;
+    border-radius: 1mm;
+    position: absolute;
+    box-sizing: border-box;
+    padding: 1mm 1.5mm;
+    font-size: 2.8mm;
+    overflow: hidden; /* Important, mais le contenu interne gérera son propre overflow */
+    display: flex;
+    flex-direction: column;
+}
+
+.bloc-titre {
+    font-weight: 700;
+    color: #2d396b;
+    font-size: 1em;
+    margin-bottom: 0.8mm;
+    padding: 0.5mm;
+    border-bottom: 0.2mm solid #d0d8e8;
+    line-height: 1.2;
+    flex-shrink: 0; /* Empêche le titre de rétrécir */
+}
+.bloc-titre[contenteditable="true"]:focus {
+    background-color: #e8f0fe;
+    outline: 0.5mm dashed #2d396b;
+}
+
+.bloc-content {
+    flex-grow: 1; /* Permet au contenu de prendre l'espace vertical restant */
+    outline: none;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    padding: 0.5mm;
+    font-size: 0.95em;
+    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
+    overflow-x: hidden; /* Empêche le défilement horizontal la plupart du temps */
+    min-height: 5mm; /* Hauteur minimale pour le contenu même s'il est vide */
+}
+.bloc-content[contenteditable="true"]:focus {
+    background-color: #f0f8ff;
+    outline: 0.5mm dashed #6ea0ec;
+}
+
+.data-field[contenteditable="true"] {
+    display: inline-block;
+    min-width: 10mm;
+    padding: 0 0.5mm;
+    border-bottom: 0.2mm dotted #99aacc;
+    background-color: #f8faff;
+}
+.data-field[contenteditable="true"]:empty::before {
+    content: "...";
+    color: #aaa;
+    font-style: italic;
+}
+.data-field[contenteditable="true"]:focus {
+    border-bottom: 0.3mm solid #2d396b;
+    background-color: #e8f0fe;
+    outline: none;
+}
+
+.checkbox-custom {
+    display: inline-block;
+    width: 2.5mm; height: 2.5mm;
+    border: 0.3mm solid #333;
+    text-align: center;
+    cursor: pointer;
+    line-height: 2.2mm;
+    user-select: none;
+    vertical-align: middle;
+    margin: 0 0.5mm;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.checkbox-custom[data-checked="true"]::before {
+    content: "X";
+    color: #1c3a8e;
+}
+.checkbox-custom:focus {
+    outline: 0.5mm dashed #2d396b;
+    border-color: #2d396b;
+}
+
+.bloc-actions {
+    position: absolute;
+    bottom: 0.5mm;
+    right: 1mm;
+    display: flex;
+    gap: 0.8mm;
+    z-index: 7; /* Au-dessus des poignées de redimensionnement */
+    flex-shrink: 0; /* Empêche les actions de rétrécir */
+}
+
+.bloc-actions button, .bloc-actions .button-like-label {
+    font-size: 0.7em;
+    padding: 0.4mm 1.2mm;
+    border-radius: 0.8mm;
+    background: #5c6f9a;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    opacity: 0.15;
+    transition: opacity 0.25s ease-in-out;
+}
+.bloc:hover .bloc-actions button,
+.bloc:hover .bloc-actions .button-like-label {
+    opacity: 1;
+}
+.bloc-actions input[type="file"] { display: none; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85em;
+}
+th, td {
+    border: 0.2mm solid #555;
+    padding: 0.4mm 0.7mm;
+    text-align: center;
+    vertical-align: middle;
+}
+td[contenteditable="true"]:focus {
+    background-color: #e8f0fe;
+    outline: 0.5mm dashed #2d396b;
+}
+td span[contenteditable="true"] {
+    display: block;
+    min-height: 1.2em;
+    padding: 0.2mm;
+}
+td span[contenteditable="true"]:focus {
+     background-color: #e8f0fe;
+     outline: none;
+}
+th {
+    background-color: #edf2f7;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+.table-actions {
+    margin-top: 1mm;
+    text-align: right;
+    flex-shrink: 0;
+}
+.table-actions button {
+    font-size: 0.75em;
+    padding: 0.5mm 1mm;
+    background-color: #788cb3;
+}
+.comladder-table th, .comladder-table td { font-size: 0.75em; padding: 0.2mm 0.4mm; }
+.timeline-table th, .timeline-table td { font-size: 0.8em; padding: 0.3mm 0.5mm; }
+
+.global-actions {
+    background-color: #2d396b;
+    padding: 7px;
+    text-align: center;
+    margin-bottom: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.global-actions button, .global-actions .button-like-label {
+    background-color: #6ea0ec;
+    color: white;
+    border: none;
+    padding: 6px 11px;
+    margin: 0 3px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 12px;
+}
+.global-actions .button-like-label { display: inline-block; }
+.global-actions button:hover, .global-actions .button-like-label:hover { background-color: #5a8bcd; }
+.page-toggle { display: inline-block; margin-left: 15px; }
+.page-toggle button { background-color: #88a3d4; font-size: 11px; padding: 5px 8px; }
+.page-toggle button.active { background-color: #5a8bcd; font-weight: bold; }
+
+.datacard-viewer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.page-identifier {
+    position: absolute;
+    top: 0.5mm;
+    right: 1mm;
+    font-size: 2mm;
+    color: #999;
+    font-weight: bold;
+}
+.classification-footer {
+    position: absolute;
+    bottom: 1.5mm;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5mm;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Poignées de redimensionnement */
+.resize-handle {
+    position: absolute;
+    background-color: rgba(45, 57, 107, 0.1); /* Très discrète */
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    z-index: 6;
+}
+.bloc:hover .resize-handle {
+    opacity: 0.7; /* Un peu plus visible au survol du bloc */
+}
+.resize-handle:hover {
+    background-color: rgba(45, 57, 107, 0.5); /* Plus visible au survol de la poignée */
+    opacity: 1;
+}
+
+.resize-handle-right {
+    top: 0;
+    right: -2mm; /* Légèrement à l'extérieur */
+    width: 4mm; /* Zone de clic */
+    height: 100%;
+    cursor: col-resize;
+}
+.resize-handle-bottom {
+    bottom: -2mm;
+    left: 0;
+    width: 100%;
+    height: 4mm;
+    cursor: row-resize;
+}
+/* Vous pouvez ajouter -left et -top si vous implémentez leur logique */
+
+/* Style pour indiquer qu'un redimensionnement est en cours */
+body.is-resizing {
+    user-select: none;
+}
+body.is-resizing * {
+    pointer-events: none; /* Important pour que les événements mousemove soient capturés par le document */
+}
+body.is-resizing .bloc.is-resizing-element,
+body.is-resizing .bloc.is-resizing-adjacent {
+    pointer-events: auto !important; /* Permettre aux blocs en cours de redimensionnement de recevoir des événements si besoin */
+}
+body.is-resizing .resize-handle {
+    pointer-events: auto !important; /* Permettre à la poignée de continuer à recevoir des événements */
+}
+
+
+/* == STYLES DE POSITIONNEMENT SPÉCIFIQUES AUX BLOCS == */
+/* Ces valeurs sont des ESTIMATIONS. Vous DEVEZ les mesurer sur votre PDF. */
+/* --- RECTO - VOLET GAUCHE --- */
+.bloc-msn-objective { top: 3mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; }
+.bloc-domestics { top: 20.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 12mm; }
+.bloc-support { top: 33mm; left: 2.5mm; width: calc(100% - 5mm); height: 13mm; }
+.bloc-comladder { top: 46.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 67mm; }
+.bloc-timeline { top: 114mm; left: 2.5mm; width: calc(100% - 5mm); height: 62mm; }
+.bloc-external-contracts { top: 176.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; }
+.bloc-element-package-contracts { top: 190.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; }
+/* --- RECTO - VOLET DROIT --- */
+.bloc-tactics-header { top: 3mm; left: 2.5mm; width: calc(100% - 5mm); height: 15mm; }
+.bloc-tactics-hold1 { top: 18.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 26.5mm; } /* 48% pour laisser un petit espace */
+.bloc-tactics-hold2 { top: 18.5mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 26.5mm; } /* 52% pour commencer après l'espace */
+.bloc-tactics-joinpackage { top: 45.5mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 20mm; }
+.bloc-tactics-ingress { top: 45.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; }
+/* Correction position Ingress */
+.bloc-tactics-ingress { top: 66mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; }
+
+.bloc-targets-dzone { top: 83.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-dzvannes { top: 121mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-lzrennes { top: 83.5mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-dzlfoe { top: 121mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
+
+.bloc-whatifs-safety { top: 159mm; left: 2.5mm; width: calc(100% - 5mm); height: 45mm; } /* Augmenté la hauteur pour correspondre au PDF */
+
+
+/* --- VERSO --- */
+.bloc-mission-codewords { top: 3mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 10mm; }
+.bloc-general-codewords { top: 15mm; left: 2.5mm; width: calc(100% - 5mm); height: 60mm; }
+/* ... et ainsi de suite pour tous les blocs ... */
+
+/* Styles pour l'impression */
+@media print {
+    html, body { background: #fff !important; margin: 0; padding: 0; font-size: 9pt; }
+    .global-actions { display: none !important; }
+    .datacard-viewer { flex-direction: column !important; }
+    .page {
+        display: block !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 297mm !important;
+        height: 210mm !important;
+        page-break-after: always;
+        overflow: hidden !important;
+    }
+    .page:last-child { page-break-after: avoid; }
+    .a5-volet:first-child { border-right: 0.4mm dashed #333 !important; }
+    .pliage-indic, .resize-handle { display: none !important; } /* Cacher les poignées à l'impression */
+    .no-print, .bloc-actions, .table-actions { display: none !important; }
+    .bloc { border: 0.3mm solid #000 !important; color: #000 !important; border-radius: 0.5mm; }
+    .bloc-titre { color: #000 !important; border-bottom: 0.15mm solid #333 !important;}
+    td, th { border: 0.15mm solid #000 !important; }
+    .data-field[contenteditable="true"] {
+        border-bottom: none !important;
+        background-color: transparent !important;
+        padding: 0;
+    }
+    .data-field[contenteditable="true"]:empty::before { content: ""; }
+    .bloc-content[contenteditable="true"]:focus,
+    .bloc-titre[contenteditable="true"]:focus,
+    td[contenteditable="true"]:focus,
+    td span[contenteditable="true"]:focus,
+    .data-field[contenteditable="true"]:focus {
+        background-color: transparent !important;
+        outline: none !important;
+    }
+    .checkbox-custom { border-color: #000 !important; }
+    .checkbox-custom[data-checked="true"]::before { color: #000 !important; }
+    .classification-footer { color: #000 !important; }
+    .bloc-content { overflow-y: visible !important; /* Pour imprimer tout le contenu, même s'il dépasse */ }
+}

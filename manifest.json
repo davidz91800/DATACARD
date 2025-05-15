@@ -1,0 +1,21 @@
+{
+    "name": "Datacard Numérique CIET (Modulaire)",
+    "short_name": "DatacardCIETMod",
+    "description": "Application de génération de datacard de mission aérienne pour le CIET.",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2d396b",
+    "icons": [
+        {
+            "src": "icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
