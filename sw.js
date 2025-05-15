@@ -1,75 +1,117 @@
-const CACHE_NAME = 'datacard-ciet-mod-cache-v1'; // Changez le nom du cache si la structure change
+const CACHE_NAME = 'cietDatacardFull_v4-cache-final'; // CHANGEZ CE NOM SI VOUS MODIFIEZ urlsToCache OU LE SW
 const urlsToCache = [
-    '.',
-    'index.html',
-    'style.css',
-    'script.js',
-    'manifest.json',
-    'icons/icon-192x192.png',
-    'icons/icon-512x512.png',
+    './', // Cache la page d'accueil (index.html à la racine)
+    './index.html',
+    './style.css',
+    './script.js',
+    './manifest.json',
+    './favicon.ico', // Si vous avez un favicon.ico à la racine
+    './icons/icon-192x192.png',
+    './icons/icon-512x512.png',
+    // Polices Google - elles seront mises en cache si accessibles lors de l'installation.
+    // Pour un mode hors-ligne 100% garanti pour les polices, hébergez-les localement et ajoutez les chemins ici.
     'https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap',
-    // Ajoutez ici les URLs exactes des fichiers woff2 si vous les connaissez et voulez les cacher agressivement
-    // Exemple (à vérifier dans l'onglet Network de votre navigateur):
-    'https://fonts.gstatic.com/s/montserrat/v25/JTUSjIg1_i6t8kCHKm459WRhyzbi.woff2',
-    'https://fonts.gstatic.com/s/montserrat/v25/JTURjIg1_i6t8kCHKm45_dJE3gnD_g.woff2'
+    // Les fichiers .woff2 sont chargés par le CSS ci-dessus. Ils seront mis en cache par le navigateur via la stratégie de fetch,
+    // mais pour une mise en cache agressive par le SW, vous devriez les lister explicitement si vous les hébergez localement.
+    // Exemple si hébergées localement (chemins à adapter):
+    // './fonts/montserrat-v25-latin-regular.woff2',
+    // './fonts/montserrat-v25-latin-700.woff2',
 ];
 
+// Événement d'installation : mise en cache des ressources de base de l'application
 self.addEventListener('install', event => {
+    console.log('SW: Evento INSTALL disparado');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
-                return cache.addAll(urlsToCache.map(url => new Request(url, {cache: 'reload'}))); // Force reload from network
+                console.log('SW: Cache aberto:', CACHE_NAME);
+                console.log('SW: Tentando cachear urls iniciais:', urlsToCache);
+                return cache.addAll(urlsToCache)
+                    .then(() => {
+                        console.log('SW: Todos os arquivos em urlsToCache foram cacheados com sucesso!');
+                    })
+                    .catch(error => {
+                        console.error('SW: Falha em cache.addAll():', error);
+                        // Log pour aider à identifier quelle URL a causé l'échec
+                        urlsToCache.forEach(url => {
+                            fetch(new Request(url, { mode: 'no-cors' })) // mode no-cors pour les requêtes cross-origin comme les polices
+                                .then(res => {
+                                    if (!res.ok && res.status !== 0) { // status 0 pour les requêtes opaques réussies
+                                        console.error(`SW: Falha ao buscar ${url} durante cache.addAll - Status: ${res.status}`);
+                                    }
+                                })
+                                .catch(err => console.error(`SW: Erro de rede ao buscar ${url} durante cache.addAll:`, err));
+                        });
+                    });
+            })
+            .catch(error => {
+                console.error('SW: Falha em caches.open():', error);
             })
     );
 });
 
+// Événement d'activation : nettoyage des anciens caches et prise de contrôle
+self.addEventListener('activate', event => {
+    console.log('SW: Evento ACTIVATE disparado');
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        console.log('SW: Limpando cache antigo:', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => {
+            console.log('SW: Caches antigos limpos, reivindicando clientes.');
+            return self.clients.claim(); // Permet au SW de contrôler les clients immédiatement
+        }).catch(error => {
+            console.error('SW: Erro durante a ativação (limpeza de cache ou reivindicação de clientes):', error);
+        })
+    );
+});
+
+// Événement fetch : intercepter les requêtes réseau et servir depuis le cache si possible
 self.addEventListener('fetch', event => {
+    // console.log('SW: Evento FETCH para', event.request.url); // Peut être très verbeux, décommentez pour débogage
     event.respondWith(
         caches.match(event.request)
-            .then(response => {
-                if (response) {
-                    return response; // Servir depuis le cache
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    // console.log('SW: Servindo do cache:', event.request.url);
+                    return cachedResponse;
                 }
-                // Important: Cloner la requête. Une requête est un flux et ne peut être consommée qu'une fois.
-                // Il nous faut la cloner pour pouvoir l'utiliser à la fois par le cache et par le navigateur.
-                let fetchRequest = event.request.clone();
 
-                return fetch(fetchRequest).then(
-                    function(response) {
-                        // Vérifier si nous avons reçu une réponse valide
-                        if(!response || response.status !== 200 || response.type !== 'basic' && response.type !== 'cors') { // basic pour same-origin, cors pour les polices
-                            return response;
+                // console.log('SW: Buscando da rede:', event.request.url);
+                return fetch(event.request).then(
+                    networkResponse => {
+                        // Optionnel : Mettre en cache dynamiquement les nouvelles requêtes réussies
+                        // Utile si vous avez des ressources qui ne sont pas dans urlsToCache
+                        // mais que vous voulez rendre disponibles hors ligne après leur premier chargement.
+                        if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
+                            // Ne pas mettre en cache toutes les requêtes (ex: API POST/PUT), seulement les GET valides.
+                            // S'assurer que l'URL n'est pas une extension Chrome ou autre chose d'interne.
+                            if (!event.request.url.startsWith('chrome-extension://')) {
+                                const responseToCache = networkResponse.clone();
+                                caches.open(CACHE_NAME) // Utiliser le même cache ou un cache dynamique séparé
+                                    .then(cache => {
+                                        // console.log('SW: Cacheando nova requisição:', event.request.url);
+                                        cache.put(event.request, responseToCache);
+                                    });
+                            }
                         }
-
-                        // Important: Cloner la réponse. Une réponse est un flux et ne peut être consommée qu'une fois.
-                        // Il nous faut la cloner pour pouvoir l'utiliser à la fois par le cache et par le navigateur.
-                        let responseToCache = response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(function(cache) {
-                                cache.put(event.request, responseToCache);
-                            });
-
-                        return response;
+                        return networkResponse;
                     }
-                );
+                ).catch(error => {
+                    console.warn('SW: Falha na requisição de rede e não encontrado no cache:', event.request.url, error);
+                    // Optionnel : Renvoyer une page hors-ligne personnalisée
+                    // if (event.request.mode === 'navigate') { // Seulement pour les navigations de page
+                    //     return caches.match('./offline.html'); // Assurez-vous que offline.html est dans urlsToCache
+                    // }
+                    // Pour les autres types de requêtes (images, scripts), laisser l'erreur se propager
+                    // pour que l'application puisse la gérer ou afficher un état dégradé.
+                });
             })
     );
-});
-
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
 });

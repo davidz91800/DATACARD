@@ -5,6 +5,7 @@ html, body {
     padding: 0;
     font-family: 'Montserrat', Arial, sans-serif;
     font-size: 10px; /* Base pour conversion facile mm -> px si besoin, mais mm est mieux pour la précision */
+    -webkit-tap-highlight-color: transparent; /* Empêche le flash bleu sur mobile au clic */
 }
 
 .a4-paysage {
@@ -25,7 +26,7 @@ html, body {
     height: 100%;
     position: relative;
     box-sizing: border-box;
-    padding: 2mm;
+    padding: 2mm; /* Espace intérieur pour que les blocs ne collent pas aux bords */
 }
 
 .a5-volet:first-child {
@@ -48,8 +49,8 @@ html, body {
     position: absolute;
     box-sizing: border-box;
     padding: 1mm 1.5mm;
-    font-size: 2.8mm;
-    overflow: hidden; /* Important, mais le contenu interne gérera son propre overflow */
+    font-size: 2.8mm; /* Environ 8pt, à ajuster */
+    overflow: hidden; /* Le bloc lui-même cache ce qui dépasse sa propre frame */
     display: flex;
     flex-direction: column;
 }
@@ -57,12 +58,13 @@ html, body {
 .bloc-titre {
     font-weight: 700;
     color: #2d396b;
-    font-size: 1em;
+    font-size: 1em; /* Relatif à la font-size du .bloc */
     margin-bottom: 0.8mm;
     padding: 0.5mm;
     border-bottom: 0.2mm solid #d0d8e8;
     line-height: 1.2;
-    flex-shrink: 0; /* Empêche le titre de rétrécir */
+    flex-shrink: 0; /* Empêche le titre de être compressé verticalement */
+    min-height: 1.2em; /* Pour que même un titre vide ait une petite hauteur */
 }
 .bloc-titre[contenteditable="true"]:focus {
     background-color: #e8f0fe;
@@ -70,32 +72,34 @@ html, body {
 }
 
 .bloc-content {
-    flex-grow: 1; /* Permet au contenu de prendre l'espace vertical restant */
+    flex-grow: 1; /* Prend l'espace vertical restant */
     outline: none;
-    overflow-wrap: break-word;
+    overflow-wrap: break-word; /* ou word-break: break-all; si nécessaire */
     line-height: 1.3;
     padding: 0.5mm;
-    font-size: 0.95em;
+    font-size: 0.95em; /* Un peu plus petit que le titre du bloc */
     overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
-    overflow-x: hidden; /* Empêche le défilement horizontal la plupart du temps */
-    min-height: 5mm; /* Hauteur minimale pour le contenu même s'il est vide */
+    overflow-x: hidden;
+    min-height: 5mm; /* Hauteur minimale pour que le bloc-content soit toujours un peu visible */
 }
 .bloc-content[contenteditable="true"]:focus {
-    background-color: #f0f8ff;
-    outline: 0.5mm dashed #6ea0ec;
+    background-color: #f0f8ff; /* Légère surbrillance pour le contenu éditable */
+    /* outline: 0.5mm dashed #6ea0ec; /* Peut-être trop distrayant, à voir */
 }
 
 .data-field[contenteditable="true"] {
     display: inline-block;
-    min-width: 10mm;
+    min-width: 8mm; /* Largeur minimale pour faciliter la sélection */
     padding: 0 0.5mm;
     border-bottom: 0.2mm dotted #99aacc;
     background-color: #f8faff;
+    line-height: 1.2; /* Pour éviter que le texte ne soit trop collé à la bordure */
 }
 .data-field[contenteditable="true"]:empty::before {
-    content: "...";
+    content: "..."; /* Placeholder pour champs vides */
     color: #aaa;
     font-style: italic;
+    display: inline-block; /* Pour que le placeholder soit visible */
 }
 .data-field[contenteditable="true"]:focus {
     border-bottom: 0.3mm solid #2d396b;
@@ -109,7 +113,7 @@ html, body {
     border: 0.3mm solid #333;
     text-align: center;
     cursor: pointer;
-    line-height: 2.2mm;
+    line-height: 2.2mm; /* Ajuster pour centrer le X */
     user-select: none;
     vertical-align: middle;
     margin: 0 0.5mm;
@@ -132,7 +136,7 @@ html, body {
     display: flex;
     gap: 0.8mm;
     z-index: 7; /* Au-dessus des poignées de redimensionnement */
-    flex-shrink: 0; /* Empêche les actions de rétrécir */
+    flex-shrink: 0;
 }
 
 .bloc-actions button, .bloc-actions .button-like-label {
@@ -155,13 +159,13 @@ html, body {
 table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.85em;
+    font-size: 0.85em; /* Ajustez pour la lisibilité dans les tableaux */
 }
 th, td {
     border: 0.2mm solid #555;
     padding: 0.4mm 0.7mm;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: middle; /* ou top si vous préférez */
 }
 td[contenteditable="true"]:focus {
     background-color: #e8f0fe;
@@ -191,8 +195,9 @@ th {
     padding: 0.5mm 1mm;
     background-color: #788cb3;
 }
-.comladder-table th, .comladder-table td { font-size: 0.75em; padding: 0.2mm 0.4mm; }
-.timeline-table th, .timeline-table td { font-size: 0.8em; padding: 0.3mm 0.5mm; }
+/* Styles spécifiques pour les tableaux très denses */
+.comladder-table th, .comladder-table td { font-size: 0.70em; padding: 0.1mm 0.3mm; line-height: 1.1; }
+.timeline-table th, .timeline-table td { font-size: 0.75em; padding: 0.2mm 0.4mm; line-height: 1.1;}
 
 .global-actions {
     background-color: #2d396b;
@@ -246,23 +251,24 @@ th {
 /* Poignées de redimensionnement */
 .resize-handle {
     position: absolute;
-    background-color: rgba(45, 57, 107, 0.1); /* Très discrète */
+    background-color: rgba(45, 57, 107, 0.1);
     opacity: 0;
     transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
-    z-index: 6;
+    z-index: 6; /* Sous les .bloc-actions mais au-dessus du contenu normal */
 }
-.bloc:hover .resize-handle {
-    opacity: 0.7; /* Un peu plus visible au survol du bloc */
+.bloc:hover .resize-handle,
+.bloc.is-resizing-element .resize-handle { /* Toujours visible sur le bloc en cours de redim. */
+    opacity: 0.7;
 }
 .resize-handle:hover {
-    background-color: rgba(45, 57, 107, 0.5); /* Plus visible au survol de la poignée */
+    background-color: rgba(45, 57, 107, 0.5);
     opacity: 1;
 }
 
 .resize-handle-right {
     top: 0;
-    right: -2mm; /* Légèrement à l'extérieur */
-    width: 4mm; /* Zone de clic */
+    right: -2mm; /* Légèrement à l'extérieur du bord pour faciliter la saisie */
+    width: 4mm;  /* Zone de clic effective */
     height: 100%;
     cursor: col-resize;
 }
@@ -273,21 +279,21 @@ th {
     height: 4mm;
     cursor: row-resize;
 }
-/* Vous pouvez ajouter -left et -top si vous implémentez leur logique */
 
 /* Style pour indiquer qu'un redimensionnement est en cours */
 body.is-resizing {
-    user-select: none;
+    user-select: none; /* Empêche la sélection de texte pendant le drag */
 }
-body.is-resizing * {
-    pointer-events: none; /* Important pour que les événements mousemove soient capturés par le document */
+body.is-resizing * { /* Empêche les événements de survol sur les autres éléments, sauf ceux concernés */
+    pointer-events: none;
 }
+/* Permettre aux éléments spécifiquement impliqués dans le redimensionnement de continuer à recevoir des événements */
 body.is-resizing .bloc.is-resizing-element,
-body.is-resizing .bloc.is-resizing-adjacent {
-    pointer-events: auto !important; /* Permettre aux blocs en cours de redimensionnement de recevoir des événements si besoin */
-}
+body.is-resizing .bloc.is-resizing-element *, /* Et ses enfants */
+body.is-resizing .bloc.is-resizing-adjacent,
+body.is-resizing .bloc.is-resizing-adjacent *, /* Et ses enfants */
 body.is-resizing .resize-handle {
-    pointer-events: auto !important; /* Permettre à la poignée de continuer à recevoir des événements */
+    pointer-events: auto !important;
 }
 
 
@@ -303,25 +309,27 @@ body.is-resizing .resize-handle {
 .bloc-element-package-contracts { top: 190.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; }
 /* --- RECTO - VOLET DROIT --- */
 .bloc-tactics-header { top: 3mm; left: 2.5mm; width: calc(100% - 5mm); height: 15mm; }
-.bloc-tactics-hold1 { top: 18.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 26.5mm; } /* 48% pour laisser un petit espace */
-.bloc-tactics-hold2 { top: 18.5mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 26.5mm; } /* 52% pour commencer après l'espace */
-.bloc-tactics-joinpackage { top: 45.5mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 20mm; }
-.bloc-tactics-ingress { top: 45.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; }
-/* Correction position Ingress */
-.bloc-tactics-ingress { top: 66mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; }
+.bloc-tactics-hold1 { top: 18.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 26.5mm; }
+.bloc-tactics-hold2 { top: 18.5mm; left: calc(50% + 1mm); width: calc(48% - 3.5mm); height: 26.5mm; } /* Ajusté pour l'espace */
+.bloc-tactics-joinpackage { top: 45.5mm; left: calc(50% + 1mm); width: calc(48% - 3.5mm); height: 20mm; }
+.bloc-tactics-ingress { top: 45.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 20mm; } /* Ingress à côté de Join Package */
+/* Si Ingress prend toute la largeur sous les holds : */
+/* .bloc-tactics-ingress { top: 45.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; } */
 
-.bloc-targets-dzone { top: 83.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; }
-.bloc-targets-dzvannes { top: 121mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; }
-.bloc-targets-lzrennes { top: 83.5mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
-.bloc-targets-dzlfoe { top: 121mm; left: calc(52% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-dzone { top: 66mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; } /* Abaissé pour laisser place à Ingress/Join */
+.bloc-targets-dzvannes { top: 103.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-lzrennes { top: 66mm; left: calc(50% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-dzlfoe { top: 103.5mm; left: calc(50% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
 
-.bloc-whatifs-safety { top: 159mm; left: 2.5mm; width: calc(100% - 5mm); height: 45mm; } /* Augmenté la hauteur pour correspondre au PDF */
+.bloc-whatifs-safety { top: 141mm; left: 2.5mm; width: calc(100% - 5mm); height: 45mm; }
 
 
 /* --- VERSO --- */
+/* Vous devrez ajouter les classes de positionnement pour le verso ici */
 .bloc-mission-codewords { top: 3mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 10mm; }
 .bloc-general-codewords { top: 15mm; left: 2.5mm; width: calc(100% - 5mm); height: 60mm; }
-/* ... et ainsi de suite pour tous les blocs ... */
+/* ... et ainsi de suite pour tous les blocs du verso ... */
+
 
 /* Styles pour l'impression */
 @media print {
@@ -340,7 +348,7 @@ body.is-resizing .resize-handle {
     }
     .page:last-child { page-break-after: avoid; }
     .a5-volet:first-child { border-right: 0.4mm dashed #333 !important; }
-    .pliage-indic, .resize-handle { display: none !important; } /* Cacher les poignées à l'impression */
+    .pliage-indic, .resize-handle { display: none !important; }
     .no-print, .bloc-actions, .table-actions { display: none !important; }
     .bloc { border: 0.3mm solid #000 !important; color: #000 !important; border-radius: 0.5mm; }
     .bloc-titre { color: #000 !important; border-bottom: 0.15mm solid #333 !important;}
@@ -362,5 +370,5 @@ body.is-resizing .resize-handle {
     .checkbox-custom { border-color: #000 !important; }
     .checkbox-custom[data-checked="true"]::before { color: #000 !important; }
     .classification-footer { color: #000 !important; }
-    .bloc-content { overflow-y: visible !important; /* Pour imprimer tout le contenu, même s'il dépasse */ }
+    .bloc-content { overflow-y: visible !important; /* Pour imprimer tout le contenu, même s'il dépasse la hauteur du bloc */ }
 }

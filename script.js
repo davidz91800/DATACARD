@@ -6,18 +6,25 @@ document.addEventListener('DOMContentLoaded', () => {
     setupPageToggle();
 
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker registered.', reg))
-            .catch(err => console.error('Service Worker registration failed:', err));
+        window.addEventListener('load', () => { // Enregistrement après le chargement de la page et de ses ressources
+            navigator.serviceWorker.register('./sw.js') // Assurez-vous que sw.js est à la racine
+                .then(registration => {
+                    console.log('Service Worker: Registered with scope:', registration.scope);
+                })
+                .catch(error => {
+                    console.error('Service Worker: Registration Failed:', error);
+                });
+        });
     }
 });
 
-const LOCAL_STORAGE_KEY = 'cietDatacardFull_v4'; // Incrémenter la version si la structure des données change
+const LOCAL_STORAGE_KEY = 'cietDatacardFull_v5-final'; // Incrémentez si la structure des données sauvegardées change
 const MIN_BLOC_WIDTH_MM = 20;
 const MIN_BLOC_HEIGHT_MM = 10;
-const ESPACE_ENTRE_BLOCS_MM = 1; // Espace fixe souhaité en mm
+const ESPACE_ENTRE_BLOCS_MM = 1;
 
-// Configuration des blocs : quel template va dans quel volet de quelle page
+// Configuration des blocs : templateId correspond à l'ID du <template> dans index.html
+// targetVoletId correspond à l'ID du <div class="a5-volet"> où le bloc sera injecté.
 const blocConfiguration = [
     // --- RECTO ---
     { templateId: 'templateMsnObjectiveR', targetVoletId: 'voletGaucheRecto' },
@@ -33,13 +40,14 @@ const blocConfiguration = [
     { templateId: 'templateTacticsJoinPackageR', targetVoletId: 'voletDroitRecto' },
     { templateId: 'templateTacticsIngressR', targetVoletId: 'voletDroitRecto' },
     { templateId: 'templateTargetsDzOneR', targetVoletId: 'voletDroitRecto' },
-    // { templateId: 'templateTargetsDzVannesR', targetVoletId: 'voletDroitRecto' },
+    // { templateId: 'templateTargetsDzVannesR', targetVoletId: 'voletDroitRecto' }, // Décommentez et créez le template si besoin
     // { templateId: 'templateTargetsLzRennesR', targetVoletId: 'voletDroitRecto' },
     // { templateId: 'templateTargetsDzLfoeR', targetVoletId: 'voletDroitRecto' },
     { templateId: 'templateWhatIfsSafetyR', targetVoletId: 'voletDroitRecto' },
     // --- VERSO ---
     { templateId: 'templateMissionCodewordsV', targetVoletId: 'voletGaucheVerso' },
     { templateId: 'templateGeneralCodewordsV', targetVoletId: 'voletGaucheVerso' },
+    // Ajoutez d'autres configurations de blocs pour le verso ici
 ];
 
 function renderAllBlocs() {
@@ -82,7 +90,7 @@ function setupPageToggle() {
         versoPage.style.display = 'flex';
         setActiveButton(showBothBtn);
     });
-    setActiveButton(showRectoBtn);
+    setActiveButton(showRectoBtn); // Afficher le recto par défaut
 }
 
 function initializeGlobalEventListeners() {
@@ -103,6 +111,7 @@ function initializeGlobalEventListeners() {
 
 function initializeBlocInteractions() {
     document.querySelectorAll('.bloc').forEach(blocDiv => {
+        // Export/Import, Checkboxes, Add Row
         const exportButton = blocDiv.querySelector('.bloc-actions button[data-action="export"]');
         if (exportButton) exportButton.addEventListener('click', () => exportBlocData(blocDiv));
         const importInput = blocDiv.querySelector('.bloc-actions input[type="file"]');
@@ -116,14 +125,20 @@ function initializeBlocInteractions() {
         blocDiv.querySelectorAll('.add-row-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const tableRef = btn.dataset.tableRef;
+                // Cible plus spécifique pour le tbody basé sur la classe de la table ou un data-attribute
                 const tableBody = blocDiv.querySelector(`table.${tableRef}-table tbody, table[data-table-id="${tableRef}"] tbody`);
                 if (tableBody) addTableRow(tableBody, tableRef);
-                else console.warn("Table body non trouvée pour ajout de ligne, ref:", tableRef);
+                else console.warn("Table body non trouvée pour ajout de ligne, ref:", tableRef, "dans le bloc", blocDiv.dataset.blocId);
             });
         });
-        const tableBody = blocDiv.querySelector('table tbody');
-        if (tableBody) {
-            tableBody.addEventListener('click', function(e) { if (e.target && e.target.classList.contains('remove-row-btn')) removeTableRow(e.target.closest('tr')); });
+        // Délégation d'événements pour les boutons de suppression de ligne
+        const tableRoot = blocDiv.querySelector('table'); // Déléguer à partir de la table elle-même
+        if (tableRoot) {
+            tableRoot.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('remove-row-btn')) {
+                    removeTableRow(e.target.closest('tr'));
+                }
+            });
         }
         initializeResizeHandles(blocDiv);
     });
@@ -132,7 +147,7 @@ function initializeBlocInteractions() {
     document.querySelector('.datacard-viewer').addEventListener('input', (event) => {
         if (event.target.isContentEditable || event.target.classList.contains('data-field') || event.target.closest('td[contenteditable="true"]') || event.target.classList.contains('classification-footer')) {
             clearTimeout(autoSaveTimeout);
-            autoSaveTimeout = setTimeout(() => { saveToLocalStorage(); console.log("Auto-saved via input."); }, 1500);
+            autoSaveTimeout = setTimeout(() => { saveToLocalStorage(); /* console.log("Auto-saved via input."); */ }, 1500);
         }
     });
 }
@@ -142,11 +157,12 @@ function toggleCheckbox() {
     this.dataset.checked = String(!isChecked);
     this.setAttribute('aria-checked', String(!isChecked));
     saveToLocalStorage();
-    console.log("Auto-saved via checkbox toggle.");
+    // console.log("Auto-saved via checkbox toggle.");
 }
 
 // --- FONCTIONS DE REDIMENSIONNEMENT ---
 function initializeResizeHandles(blocElement) {
+    // Pour l'instant, seulement droite et bas pour simplifier la logique des adjacents
     ['right', 'bottom'].forEach(dir => {
         const handle = document.createElement('div');
         handle.className = `resize-handle resize-handle-${dir}`;
@@ -157,8 +173,8 @@ function initializeResizeHandles(blocElement) {
 
 let currentResizing = { element: null, direction: null, startX: 0, startY: 0, startWidthPx: 0, startHeightPx: 0, startLeftPx: 0, startTopPx: 0, adjacentElement: null, adjacentStartWidthPx: 0, adjacentStartLeftPx: 0, adjacentStartHeightPx: 0, adjacentStartTopPx: 0, parentWidthPx: 0, parentHeightPx: 0, };
 
-function mmToPx(mm) { return (mm / 25.4) * 96; }
-function pxToMm(px) { return (px / 96) * 25.4; }
+function mmToPx(mm) { return (mm / 25.4) * 96; } // Approximation
+function pxToMm(px) { return (px / 96) * 25.4; } // Approximation
 
 function startResize(event, blocElement, direction) {
     event.preventDefault();
@@ -202,12 +218,13 @@ function findAdjacentElement(blocElement, direction) {
     const currentRect = blocElement.getBoundingClientRect();
     let closest = null;
     let minDistance = Infinity;
-    const tolerance = 15;
+    const tolerance = 15; // Tolérance en pixels pour considérer l'alignement
 
     if (direction === 'right') {
         allBlocsInVolet.forEach(otherBloc => {
             const otherRect = otherBloc.getBoundingClientRect();
-            if (Math.abs(otherRect.top - currentRect.top) < currentRect.height / 2 &&
+            // Vérifier si l'autre bloc est à peu près sur la même ligne verticale et à droite
+            if (Math.abs(otherRect.top - currentRect.top) < currentRect.height / 2 && // Chevauchement vertical suffisant
                 otherRect.left > currentRect.right - tolerance && otherRect.left < currentRect.right + mmToPx(20 + ESPACE_ENTRE_BLOCS_MM)) {
                 const distance = otherRect.left - currentRect.right;
                 if (distance < minDistance) {
@@ -219,7 +236,8 @@ function findAdjacentElement(blocElement, direction) {
     } else if (direction === 'bottom') {
         allBlocsInVolet.forEach(otherBloc => {
             const otherRect = otherBloc.getBoundingClientRect();
-            if (Math.abs(otherRect.left - currentRect.left) < currentRect.width / 2 &&
+            // Vérifier si l'autre bloc est à peu près sur la même colonne horizontale et en dessous
+            if (Math.abs(otherRect.left - currentRect.left) < currentRect.width / 2 && // Chevauchement horizontal suffisant
                 otherRect.top > currentRect.bottom - tolerance && otherRect.top < currentRect.bottom + mmToPx(20 + ESPACE_ENTRE_BLOCS_MM)) {
                 const distance = otherRect.top - currentRect.bottom;
                 if (distance < minDistance) {
@@ -247,22 +265,26 @@ function doResize(event) {
         let newWidthPx = currentResizing.startWidthPx + dx;
         if (newWidthPx < minWidthPx) newWidthPx = minWidthPx;
 
+        // Contrainte par le bord droit du parent
         const maxPossibleWidthCurrent = currentResizing.parentWidthPx - currentResizing.startLeftPx;
-        if (newWidthPx > maxPossibleWidthCurrent) {
-            newWidthPx = maxPossibleWidthCurrent;
-        }
+        if (newWidthPx > maxPossibleWidthCurrent) newWidthPx = maxPossibleWidthCurrent;
+
 
         if (adjacent) {
             let newAdjacentLeftPx = currentResizing.startLeftPx + newWidthPx + spaceBetweenElementsPx;
+            // La largeur de l'adjacent est calculée par rapport à sa fin originale et sa nouvelle position de début
             let newAdjacentWidthPx = (currentResizing.adjacentStartLeftPx + currentResizing.adjacentStartWidthPx) - newAdjacentLeftPx;
 
             if (newAdjacentWidthPx < minWidthPx) {
                 newAdjacentWidthPx = minWidthPx;
+                // Recalculer la position de l'adjacent pour qu'il ait sa largeur min
                 newAdjacentLeftPx = (currentResizing.adjacentStartLeftPx + currentResizing.adjacentStartWidthPx) - newAdjacentWidthPx;
+                // Et ajuster la largeur du bloc courant en conséquence
                 newWidthPx = newAdjacentLeftPx - spaceBetweenElementsPx - currentResizing.startLeftPx;
-                if (newWidthPx < minWidthPx) newWidthPx = minWidthPx;
+                if (newWidthPx < minWidthPx) newWidthPx = minWidthPx; // Re-vérifier le bloc courant
             }
 
+            // S'assurer que l'adjacent ne dépasse pas le parent
             if (newAdjacentLeftPx + newAdjacentWidthPx > currentResizing.parentWidthPx) {
                 newAdjacentWidthPx = currentResizing.parentWidthPx - newAdjacentLeftPx;
                  if (newAdjacentWidthPx < minWidthPx) {
@@ -283,9 +305,8 @@ function doResize(event) {
         if (newHeightPx < minHeightPx) newHeightPx = minHeightPx;
 
         const maxPossibleHeightCurrent = currentResizing.parentHeightPx - currentResizing.startTopPx;
-         if (newHeightPx > maxPossibleHeightCurrent) {
-            newHeightPx = maxPossibleHeightCurrent;
-        }
+         if (newHeightPx > maxPossibleHeightCurrent) newHeightPx = maxPossibleHeightCurrent;
+
 
         if (adjacent) {
             let newAdjacentTopPx = currentResizing.startTopPx + newHeightPx + spaceBetweenElementsPx;
@@ -345,14 +366,15 @@ function getContentData(contentElement) {
         data.rows = [];
         contentElement.querySelectorAll('tbody tr').forEach(tr => {
             const rowData = [];
-            tr.querySelectorAll('td').forEach(td => {
+            // Ne pas inclure la dernière cellule si c'est le bouton de suppression (classe .no-print)
+            tr.querySelectorAll('td:not(.no-print)').forEach(td => {
                 const editableSpan = td.querySelector('span[contenteditable="true"]');
                 const checkbox = td.querySelector('.checkbox-custom');
                 const directEditableTd = td.hasAttribute('contenteditable') && td.getAttribute('contenteditable') === 'true' && !editableSpan && !checkbox;
                 if (checkbox) rowData.push({ type: 'checkbox', checked: checkbox.dataset.checked === 'true', key: checkbox.dataset.key });
                 else if (editableSpan) rowData.push({ type: 'text', value: editableSpan.innerHTML });
                 else if (directEditableTd) rowData.push({ type: 'text', value: td.innerHTML });
-                else rowData.push({ type: 'html', value: td.innerHTML });
+                else rowData.push({ type: 'html', value: td.innerHTML }); // Cas par défaut, sauvegarde HTML brut
             });
             data.rows.push(rowData);
         });
@@ -375,10 +397,13 @@ function setContentData(contentElement, blocDataContent) {
     } else if (contentType === 'table' && blocDataContent.rows) {
         const tbody = contentElement.querySelector('tbody');
         if (!tbody) return;
-        tbody.innerHTML = '';
+        tbody.innerHTML = ''; // Vider les lignes existantes avant de repeupler
         blocDataContent.rows.forEach(rowDataArray => {
             const tr = tbody.insertRow();
-            const tableId = tbody.closest('table')?.classList.contains('comladder-table') ? 'comladder' : tbody.closest('table')?.classList.contains('timeline-table') ? 'timeline' : null;
+            const tableId = tbody.closest('table')?.classList.contains('comladder-table') ? 'comladder' :
+                          tbody.closest('table')?.classList.contains('timeline-table') ? 'timeline' :
+                          tbody.closest('table')?.dataset.tableId; // Utiliser data-table-id si présent
+
             rowDataArray.forEach((cellData) => {
                 const td = tr.insertCell();
                 if (cellData.type === 'checkbox') {
@@ -391,14 +416,15 @@ function setContentData(contentElement, blocDataContent) {
                     checkbox.addEventListener('click', function() { toggleCheckbox.call(this); });
                     checkbox.addEventListener('keydown', function(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleCheckbox.call(this); }});
                     td.appendChild(checkbox);
-                } else if (cellData.type === 'text' || typeof cellData === 'string' || (cellData && cellData.value !== undefined) ) { // Vérifier cellData avant d'accéder à .value
+                } else if (cellData.type === 'text' || typeof cellData === 'string' || (cellData && cellData.value !== undefined) ) {
                     const span = document.createElement('span');
                     span.setAttribute('contenteditable', 'true');
                     span.innerHTML = cellData.value || (typeof cellData === 'string' ? cellData : '');
                     td.appendChild(span);
                 } else if (cellData.type === 'html') td.innerHTML = cellData.value || '';
             });
-            if (tableId === 'comladder' || tableId === 'timeline') {
+            // Ajouter le bouton de suppression pour les tables configurées pour cela
+            if (tableId === 'comladder' || tableId === 'timeline' || tableId === 'externalContracts' || tableId === 'elementPackageContracts' || tableId === 'generalCodewords') {
                 const actionCell = tr.insertCell();
                 actionCell.classList.add('no-print');
                 actionCell.innerHTML = '<button class="remove-row-btn" title="Supprimer ligne">-</button>';
@@ -411,7 +437,7 @@ function collectAllData() {
     const allData = { blocs: [] };
     document.querySelectorAll('.bloc').forEach(blocDiv => {
         const blocId = blocDiv.dataset.blocId;
-        if (!blocId) return;
+        if (!blocId) return; // Ignorer si pas d'ID de bloc
         const titreElement = blocDiv.querySelector('.bloc-titre');
         const contentElement = blocDiv.querySelector('.bloc-content');
         allData.blocs.push({
@@ -419,7 +445,7 @@ function collectAllData() {
             title: titreElement ? titreElement.innerHTML : "",
             content: contentElement ? getContentData(contentElement) : {},
             style: {
-                top: blocDiv.style.top || undefined,
+                top: blocDiv.style.top || undefined, // Sauvegarde le style inline s'il existe
                 left: blocDiv.style.left || undefined,
                 width: blocDiv.style.width || undefined,
                 height: blocDiv.style.height || undefined,
@@ -440,11 +466,11 @@ function applyAllData(dataToApply) {
             const contentElement = blocDiv.querySelector('.bloc-content');
             if (titreElement && blocData.title !== undefined) titreElement.innerHTML = blocData.title;
             if (contentElement && blocData.content) setContentData(contentElement, blocData.content);
-            if (blocData.style) {
+
+            if (blocData.style) { // Appliquer les styles sauvegardés
                 ['top', 'left', 'width', 'height'].forEach(prop => {
                     if (blocData.style[prop]) blocDiv.style[prop] = blocData.style[prop];
-                    // Ne pas réinitialiser ici, car si non défini, on veut garder le style CSS de base
-                    // else blocDiv.style[prop] = '';
+                    // Ne pas effacer le style si non présent dans la sauvegarde, pour garder les styles CSS par défaut
                 });
             }
         } else console.warn(`Bloc ${blocData.blocId} non trouvé lors de l'import global.`);
@@ -457,7 +483,6 @@ function saveToLocalStorage() {
     try {
         const data = collectAllData();
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-        // console.log("Data saved to localStorage:", data); // Pour débug
     } catch (e) { console.error("Erreur de sauvegarde locale:", e); showNotification("Erreur de sauvegarde locale (quota ?).", 5000); }
 }
 
@@ -510,7 +535,7 @@ function importBlocData(event, blocDiv) {
             if (importedData.style) {
                 ['top', 'left', 'width', 'height'].forEach(prop => {
                     if (importedData.style[prop]) blocDiv.style[prop] = importedData.style[prop];
-                    else blocDiv.style[prop] = ''; // Réinitialiser si non présent
+                    else blocDiv.style[prop] = ''; // Réinitialiser si non présent dans la sauvegarde
                 });
             }
             showNotification(`Bloc "${targetBlocId}" importé.`);
@@ -518,7 +543,7 @@ function importBlocData(event, blocDiv) {
         } catch (err) { alert("Erreur lecture fichier JSON: " + err.message); }
     };
     reader.readAsText(file);
-    event.target.value = '';
+    event.target.value = ''; // Permet de réimporter le même fichier
 }
 
 function exportAllData() {
@@ -547,24 +572,20 @@ function confirmClearAllData() {
     if (confirm("Vider toute la datacard et réinitialiser les tailles des blocs ?")) {
         document.querySelectorAll('.bloc').forEach(blocDiv => {
             const contentElement = blocDiv.querySelector('.bloc-content');
-            // Réinitialiser le contenu
             if (contentElement) {
                 const contentType = contentElement.dataset.contentType || 'html';
                  if (contentType === 'structured') contentElement.querySelectorAll('.data-field').forEach(f => { if (f.classList.contains('checkbox-custom')) { f.dataset.checked = "false"; f.setAttribute('aria-checked', "false");} else f.innerHTML = '';});
                  else if (contentType === 'table') {
                      contentElement.querySelectorAll('tbody td span[contenteditable="true"]').forEach(s => s.innerHTML = '');
                      contentElement.querySelectorAll('tbody td .checkbox-custom').forEach(cb => {cb.dataset.checked = "false"; cb.setAttribute('aria-checked', "false");});
-                     // Optionnel: supprimer les lignes sauf la première ou un certain nombre de lignes par défaut
                      const tbody = contentElement.querySelector('tbody');
-                     if (tbody) {
-                         // Garder un nombre minimal de lignes, par exemple 1
-                         // while (tbody.rows.length > 1) { tbody.deleteRow(1); }
+                     if (tbody) { // Optionnel : supprimer toutes les lignes sauf la première pour les tables
+                        // while (tbody.rows.length > 1) { tbody.deleteRow(1); }
                      }
                  }
                  else if (contentType === 'html') contentElement.innerHTML = '';
             }
-            // Réinitialiser les styles inline pour revenir aux styles CSS par défaut
-            ['top', 'left', 'width', 'height'].forEach(prop => blocDiv.style[prop] = '');
+            ['top', 'left', 'width', 'height'].forEach(prop => blocDiv.style[prop] = ''); // Réinitialiser les styles inline
         });
         document.querySelector('#pageRecto .classification-footer').innerHTML = "CLASSIFICATION :";
         document.querySelector('#pageVerso .classification-footer').innerHTML = "CLASSIFICATION :";
@@ -593,14 +614,13 @@ function addTableRow(tbodyElement, tableId) {
     if (!tbodyElement) return;
     const newRow = tbodyElement.insertRow();
     let structureDefinition = [];
-    const numLine = tbodyElement.rows.length; // Pour générer des clés uniques si besoin
+    const numLine = tbodyElement.rows.length;
 
-    // Définir la structure des cellules pour chaque type de table
     if (tableId === 'comladder') structureDefinition = [ { type: 'text', value: String(numLine) }, { type: 'text' }, { type: 'text' }, { type: 'text' }, { type: 'checkbox', key: `b1l${numLine}x` }, { type: 'text' }, { type: 'text' }, { type: 'text' }, { type: 'checkbox', key: `b2l${numLine}x` }, { type: 'text' }, { type: 'text' }, { type: 'text' }, { type: 'checkbox', key: `b3l${numLine}x` }, { type: 'text' }, { type: 'text' }, { type: 'text' }, { type: 'checkbox', key: `b4l${numLine}x` }, { type: 'text' } ];
     else if (tableId === 'timeline') structureDefinition = [ {type:'text'}, {type:'text'}, {type:'text'}, {type:'text'}, {type:'text'}, {type:'text'}, {type:'text'} ];
     else if (tableId === 'externalContracts' || tableId === 'elementPackageContracts') structureDefinition = [ {type:'text'}, {type:'text'}, {type:'text'}, {type:'text'} ];
-    else if (tableId === 'generalCodewords') structureDefinition = [ {type:'text'}, {type:'text'}]; // Pour le tableau à 2 colonnes
-    else structureDefinition = [{type:'text'},{type:'text'},{type:'text'}]; // Ligne par défaut pour les autres tables
+    else if (tableId === 'generalCodewords') structureDefinition = [ {type:'text'}, {type:'text'}];
+    else structureDefinition = [{type:'text'},{type:'text'},{type:'text'}]; // Ligne par défaut pour d'autres tables
 
     structureDefinition.forEach(cellDef => {
         const cell = newRow.insertCell();
