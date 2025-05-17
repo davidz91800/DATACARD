@@ -1,0 +1,9 @@
+/* Réinitialisation et styles de base */
+html, body {
+    background: #e0e4e8;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 10px; /* Base pour conversion facile mm -> px si besoin, mais mm est mieux pour la précision */
+    -webkit-tap-highlight-color: transparent; /* Empêche le flash bleu sur mobile au clic */
+}

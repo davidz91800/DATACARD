@@ -1,0 +1,83 @@
+/* Styles pour les éléments globaux (barre d'actions, notifications, etc.) */
+.global-actions {
+    background-color: #2d396b; 
+    padding: 7px; 
+    text-align: center; 
+    margin-bottom: 8px;
+    position: sticky; 
+    top: 0; 
+    z-index: 100;
+}
+.global-actions button, .global-actions .button-like-label {
+    background-color: #6ea0ec; 
+    color: white; 
+    border: none; 
+    padding: 6px 11px; 
+    margin: 0 3px;
+    border-radius: 3px; 
+    cursor: pointer; 
+    font-family: 'Montserrat', Arial, sans-serif; 
+    font-size: 12px;
+}
+.global-actions .button-like-label { 
+    display: inline-block; 
+}
+.global-actions button:hover, .global-actions .button-like-label:hover { 
+    background-color: #5a8bcd; 
+}
+.page-toggle { 
+    display: inline-block; 
+    margin-left: 15px; 
+}
+.page-toggle button { 
+    background-color: #88a3d4; 
+    font-size: 11px; 
+    padding: 5px 8px; 
+}
+.page-toggle button.active { 
+    background-color: #5a8bcd; 
+    font-weight: bold; 
+}
+
+.page-identifier { 
+    position: absolute; 
+    top: 0.5mm; 
+    right: 1mm; 
+    font-size: 2mm; 
+    color: #999; 
+    font-weight: bold; 
+}
+.classification-footer { 
+    position: absolute; 
+    bottom: 1.5mm; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    font-size: 2.5mm; 
+    font-weight: bold; 
+    color: #333; 
+    outline: none; /* Pour contenteditable */
+}
+.classification-footer:focus {
+    background-color: #e8f0fe;
+    outline: 0.5mm dashed #2d396b;
+}
+
+#notification-area {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(45, 57, 107, 0.9); /* #2d396b avec alpha */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1001; /* Au-dessus de la plupart des éléments */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    font-size: 14px;
+}
+#notification-area.show {
+    opacity: 1;
+    visibility: visible;
+}

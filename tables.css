@@ -1,0 +1,114 @@
+/* Styles pour les tableaux (ajustés pour hauteur dynamique des lignes) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85em;
+    display: flex;       /* Fait de la table un conteneur flex vertical */
+    flex-direction: column;
+    height: 100%;        /* La table prendra la hauteur du .bloc-content */
+}
+table thead, table tbody {
+    display: block;      /* Permet à thead/tbody de se comporter comme des blocs */
+}
+table thead {
+    flex-shrink: 0;      /* Empêche thead de rétrécir */
+}
+table tbody {
+    flex-grow: 1;        /* tbody prend l'espace vertical restant */
+    overflow-y: auto;    /* Défilement si les lignes dépassent */
+    display: flex;       /* tbody est aussi un conteneur flex */
+    flex-direction: column;
+}
+tr {
+    display: table;      /* Les <tr> se comportent comme des tables (pour les <td>) */
+    width: 100%;         /* Chaque ligne prend toute la largeur */
+    table-layout: fixed; /* Colonnes de largeur égale par défaut ou selon <th> */
+    flex-grow: 1;        /* Chaque ligne essaie de grandir pour remplir l'espace du tbody */
+}
+th, td {
+    border: 0.2mm solid #555;
+    padding: 0.4mm 0.5mm; /* Réduit un peu le padding horizontal */
+    text-align: center;
+    vertical-align: middle;
+    min-height: 3.5mm;    /* Hauteur minimale pour chaque cellule (donc chaque ligne) */
+    display: flex;        /* Centrer le contenu dans la cellule */
+    align-items: center;
+    justify-content: center;
+    overflow-wrap: break-word;
+    word-break: break-all; /* Pour forcer la césure des mots très longs */
+    flex-basis: 0;        /* Pour une distribution égale des largeurs de colonnes */
+    flex-grow: 1;         /* Chaque cellule essaie de prendre une largeur égale */
+}
+
+/* Spécifier des largeurs de colonnes si nécessaire, via des classes ou nth-child sur th/td */
+.timeline-table th:nth-child(1), .timeline-table td:nth-child(1) { flex-grow: 2; flex-basis: 20mm; }
+.timeline-table th:nth-child(2), .timeline-table td:nth-child(2) { flex-grow: 1.5; flex-basis: 15mm; }
+
+.comladder-table th:nth-child(1), .comladder-table td:nth-child(1) { width: 30px; flex-grow: 0; flex-shrink:0;} /* LINE */
+.comladder-table th:nth-child(2), .comladder-table td:nth-child(2) { width: 50px; flex-grow: 0; flex-shrink:0;} /* PHASE */
+
+td[contenteditable="true"]:focus {
+    background-color: #e8f0fe;
+    outline: 0.5mm dashed #2d396b;
+}
+td span[contenteditable="true"] {
+    display: block;
+    width: 100%;
+    min-height: 1.2em;
+    padding: 0.2mm;
+    text-align: center;
+}
+td span[contenteditable="true"]:focus {
+     background-color: #e8f0fe;
+     outline: none;
+}
+th {
+    background-color: #edf2f7;
+    font-weight: bold;
+    font-size: 0.9em;
+    flex-shrink: 0;
+    height: auto; /* Pour que le header ne s'étire pas avec flex-grow:1 des tr */
+}
+td.no-print, th.no-print {
+    min-width: 4mm; width: 4mm; max-width:4mm;
+    padding: 0.1mm;
+    border: none;
+    flex-grow: 0; flex-shrink: 0; flex-basis: 4mm;
+}
+td.no-print button.remove-row-btn {
+    padding: 0.3mm; font-size: 0.7em; line-height: 1;
+    min-width: auto; width: 100%; height: 100%;
+    border-radius: 0.5mm; background-color: #ffe0e0; color: #d00; border: 1px solid #fcc;
+}
+td.no-print button.remove-row-btn:hover { background-color: #ffcfcf; }
+
+.table-actions {
+    margin-top: 1mm;
+    text-align: right;
+    flex-shrink: 0;
+}
+.table-actions button {
+    font-size: 0.75em;
+    padding: 0.5mm 1mm;
+    background-color: #788cb3; /* Couleur un peu différente pour se distinguer des actions de bloc */
+    color: white;
+    border: none;
+    border-radius: 0.8mm;
+    cursor: pointer;
+}
+.table-actions button:hover {
+    background-color: #60759a;
+}
+
+.comladder-table th, .comladder-table td {
+    font-size: 0.65em;
+    padding: 0.1mm 0.2mm;
+    line-height: 1.1;
+    min-height: 2.8mm;
+}
+.timeline-table th, .timeline-table td {
+    font-size: 0.70em;
+    padding: 0.1mm 0.3mm;
+    line-height: 1.1;
+    min-height: 3mm;
+}

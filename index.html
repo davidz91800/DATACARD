@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Datacard Numérique CIET (Recto/Verso)</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- Fichiers CSS modularisés -->
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="bloc-core.css">
+    <link rel="stylesheet" href="bloc-positions.css">
+    <link rel="stylesheet" href="bloc-ui.css">
+    <link rel="stylesheet" href="tables.css">
+    <link rel="stylesheet" href="global-ui.css">
+    <link rel="stylesheet" href="resize.css">
+    <link rel="stylesheet" href="print.css">
+
     <link rel="manifest" href="manifest.json">
     <!-- Balises PWA pour iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -40,11 +51,11 @@
             <span class="pliage-indic"></span>
             <!-- Volet Gauche RECTO -->
             <div class="a5-volet" id="voletGaucheRecto">
-                <!-- Les blocs du volet gauche du RECTO seront injectés ici -->
+                <!-- Les blocs du volet gauche du RECTO seront injectés ici par JavaScript -->
             </div>
             <!-- Volet Droit RECTO -->
             <div class="a5-volet" id="voletDroitRecto">
-                <!-- Les blocs du volet droit du RECTO seront injectés ici -->
+                <!-- Les blocs du volet droit du RECTO seront injectés ici par JavaScript -->
             </div>
             <div class="classification-footer" contenteditable="true">CLASSIFICATION :</div>
         </div>
@@ -55,11 +66,11 @@
             <span class="pliage-indic"></span>
             <!-- Volet Gauche VERSO -->
             <div class="a5-volet" id="voletGaucheVerso">
-                <!-- Blocs du volet gauche du VERSO -->
+                <!-- Blocs du volet gauche du VERSO seront injectés ici par JavaScript -->
             </div>
             <!-- Volet Droit VERSO -->
             <div class="a5-volet" id="voletDroitVerso">
-                <!-- Blocs du volet droit du VERSO -->
+                <!-- Blocs du volet droit du VERSO seront injectés ici par JavaScript -->
             </div>
             <div class="classification-footer" contenteditable="true">CLASSIFICATION :</div>
         </div>
@@ -67,311 +78,9 @@
 
     <div id="notification-area" class="no-print"></div>
 
-    <!-- ==== TEMPLATES HTML POUR LES BLOCS (RECTO) ==== -->
+    <!-- ==== TEMPLATES HTML POUR LES BLOCS SONT MAINTENANT DANS DES FICHIERS SÉPARÉS ==== -->
+    <!-- Ils seront chargés dynamiquement par JavaScript -->
 
-    <!-- == RECTO - VOLET GAUCHE == -->
-    <template id="templateMsnObjectiveR">
-        <div class="bloc bloc-msn-objective" data-bloc-id="msnObjective">
-            <div class="bloc-titre" contenteditable="true">1. MSN OBJECTIVE:</div>
-            <div class="bloc-content" data-content-type="structured">
-                1) Drop 8 bundles over DZ ONE = <span class="data-field" data-key="dzOneBundles" contenteditable="true"></span> <span class="data-field" data-key="dzOneStatus" contenteditable="true"></span><br>
-                2) Drop 36 EPC over DZ VANNES = <span class="data-field" data-key="dzVannesEpc" contenteditable="true"></span> <span class="data-field" data-key="dzVannesStatus" contenteditable="true"></span><br>
-                3) Infiltrate 3 VBL + 25 SF LFRN <span class="data-field" data-key="infiltrateStatus" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateDomesticsR">
-        <div class="bloc bloc-domestics" data-bloc-id="domestics">
-            <div class="bloc-titre" contenteditable="true">2. DOMESTICS</div>
-            <div class="bloc-content" data-content-type="html" contenteditable="true">
-                <!-- Contenu libre ici, ou structurez avec des data-fields si vous préférez -->
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateSupportR">
-         <div class="bloc bloc-support" data-bloc-id="support">
-            <div class="bloc-titre" contenteditable="true">3. SUPPORT</div>
-            <div class="bloc-content" data-content-type="html" contenteditable="true">
-                (see MC Side) OVRVW PER ASSETS + BIGPIC/WORK AREA for each<br>
-                MANDATORY CALLS/COMSHARING/PARROT/TIMBER/CODEWORDS
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateComladderR">
-        <div class="bloc bloc-comladder" data-bloc-id="comladder">
-            <div class="bloc-titre">5. COMLADDER <span style="float:right;">COMPLAN VERSION : <span class="data-field" data-key="complanVersion" contenteditable="true"></span></span></div>
-            <div class="bloc-content" data-content-type="table">
-                <table class="comladder-table"> <!-- Ajout de la classe pour ciblage spécifique si besoin -->
-                    <thead>
-                        <tr>
-                            <th rowspan="2">LINE</th><th rowspan="2">PHASE</th>
-                            <th colspan="4">BOX 1</th> <th colspan="4">BOX 2</th>
-                            <th colspan="4">BOX 3</th> <th colspan="4">BOX 4</th>
-                        </tr>
-                        <tr>
-                            <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
-                            <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
-                            <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
-                            <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Lignes modèles pour COMLADDER -->
-                        <tr>
-                            <td><span contenteditable="true">1</span></td> <td><span contenteditable="true">EGRESS</span></td>
-                            <td><span contenteditable="true">X</span></td><td><span contenteditable="true">123.45/345,67</span></td><td><span class="data-field checkbox-custom" data-key="b1l1x"></span></td><td><span contenteditable="true">X</span></td>
-                            <td><span contenteditable="true">B45</span></td><td><span contenteditable="true">123.45/345,67</span></td><td><span class="data-field checkbox-custom" data-key="b2l1x"></span></td><td><span contenteditable="true">X</span></td>
-                            <td><span contenteditable="true">G28</span></td><td><span contenteditable="true">123.45/345,67</span></td><td><span class="data-field checkbox-custom" data-key="b3l1x"></span></td><td><span contenteditable="true">X</span></td>
-                            <td><span contenteditable="true">R5</span></td><td><span contenteditable="true">339,725</span></td><td><span class="data-field checkbox-custom" data-key="b4l1x"></span></td><td><span contenteditable="true">AUTO INFO</span></td>
-                            <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
-                        </tr>
-                         <tr>
-                            <td><span contenteditable="true">2</span></td> <td><span contenteditable="true">EXEMPLE</span></td>
-                            <td><span contenteditable="true">NS</span></td><td><span contenteditable="true">ATC</span></td><td><span class="data-field checkbox-custom" data-key="b1l2x"></span></td><td><span contenteditable="true">SA</span></td>
-                            <td><span contenteditable="true">TACTICAL</span></td><td><span contenteditable="true">A</span></td><td><span class="data-field checkbox-custom" data-key="b2l2x"></span></td><td><span contenteditable="true">I/P</span></td>
-                            <td><span contenteditable="true">NS</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b3l2x"></span></td><td><span contenteditable="true"></span></td>
-                            <td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b4l2x"></span></td><td><span contenteditable="true"></span></td>
-                            <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
-                        </tr>
-                        <!-- Ajoutez 5 autres lignes sur ce modèle si nécessaire pour le remplissage initial -->
-                    </tbody>
-                </table>
-                <div class="table-actions no-print">
-                    <button class="add-row-btn" data-table-ref="comladder">Ajouter Ligne COMLADDER</button>
-                </div>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateTimelineR">
-        <div class="bloc bloc-timeline" data-bloc-id="timeline">
-            <div class="bloc-titre" contenteditable="true">6. TIMELINE</div>
-            <div class="bloc-content" data-content-type="table">
-                <table class="timeline-table">
-                    <thead><tr><th>EVENT</th><th>WPT</th><th>#1</th><th>#2</th><th>#3</th><th>#4</th><th>MSA</th><th class="no-print"></th></tr></thead>
-                    <tbody>
-                        <tr><td><span contenteditable="true">ROLL CALL</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td></tr>
-                        <tr><td><span contenteditable="true">START</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td></tr>
-                        <!-- Remplissez avec les autres événements par défaut du PDF -->
-                         <tr><td><span contenteditable="true">TAXI</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">T/O</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">LAST T/O</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">HOLD OUT</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">LAST HOLD OUT</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">PUSH</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">LAST PUSH</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">IP</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">DROP/LDG</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">EXIT</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                         <tr><td><span contenteditable="true">LDG</span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn">-</button></td></tr>
-                    </tbody>
-                </table>
-                 <div class="table-actions no-print"><button class="add-row-btn" data-table-ref="timeline">Ajouter Ligne Timeline</button></div>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateExternalContractsR">
-        <div class="bloc bloc-external-contracts" data-bloc-id="externalContracts">
-            <div class="bloc-titre" contenteditable="true">7A. EXTERNAL CONTRACTS <span style="font-size:0.8em; font-weight:normal;">(ENABLING / SUPPORTING EFFECTS)</span></div>
-            <div class="bloc-content" data-content-type="table">
-                <table data-table-id="externalContracts"><thead><tr><th>CRITERIA</th><th>AUTHORITY</th><th>COMMS</th><th>ACTION</th><th class="no-print"></th></tr></thead><tbody><tr><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td></tr></tbody></table>
-                <div class="table-actions no-print"><button class="add-row-btn" data-table-ref="externalContracts">Ajouter Ligne</button></div>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateElementPackageContractsR">
-        <div class="bloc bloc-element-package-contracts" data-bloc-id="elementPackageContracts">
-            <div class="bloc-titre" contenteditable="true">7B. ELEMENT/PACKAGE CONTRACTS</div>
-            <div class="bloc-content" data-content-type="table">
-                <table data-table-id="elementPackageContracts"><thead><tr><th>CRITERIA</th><th>AUTHORITY</th><th>COMMS</th><th>ACTION</th><th class="no-print"></th></tr></thead><tbody><tr><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td></tr></tbody></table>
-                <div class="table-actions no-print"><button class="add-row-btn" data-table-ref="elementPackageContracts">Ajouter Ligne</button></div>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <!-- == RECTO - VOLET DROIT == -->
-    <template id="templateTacticsHeaderR">
-        <div class="bloc bloc-tactics-header" data-bloc-id="tacticsHeader">
-            <div class="bloc-titre" contenteditable="true" style="text-align:center; font-size:1.1em;">4. TACTICS <span style="float:right; font-size:0.8em; font-weight:normal;">CUJAS 21&22 / CUJAS 23&24</span></div>
-            <div class="bloc-content" data-content-type="structured">
-                TAXI: <span class="data-field" data-key="taxi" contenteditable="true"></span><br>
-                TAKE OFF: <span class="data-field" data-key="takeoff" contenteditable="true"></span><br>
-                BOARDING: <span class="data-field" data-key="boarding" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateTacticsHold1R">
-        <div class="bloc bloc-tactics-hold1" data-bloc-id="tacticsHold1">
-            <div class="bloc-titre" contenteditable="true">HOLD 1</div>
-            <div class="bloc-content" data-content-type="structured">
-                WPT: <span class="data-field" data-key="wpt" contenteditable="true"></span> AXIS: <span class="data-field" data-key="axis" contenteditable="true"></span> <span class="data-field checkbox-custom" data-key="axisTypeL"></span> L <span class="data-field checkbox-custom" data-key="axisTypeR"></span> R<br>
-                SPEED: <span class="data-field" data-key="speed" contenteditable="true"></span> QNH: <span class="data-field" data-key="qnh" contenteditable="true"></span> ATIS: <span class="data-field" data-key="atis" contenteditable="true"></span><br>
-                ALT Ldr: <span class="data-field" data-key="altLdr" contenteditable="true"></span> Wn: <span class="data-field" data-key="wn" contenteditable="true"></span><br>
-                Coord: <span class="data-field" data-key="coord" contenteditable="true"></span><br>
-                Outbound leg = <span class="data-field" data-key="outboundLeg" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateTacticsHold2R">
-         <div class="bloc bloc-tactics-hold2" data-bloc-id="tacticsHold2">
-            <div class="bloc-titre" contenteditable="true">HOLD 2</div>
-            <div class="bloc-content" data-content-type="structured">
-                WPT: <span class="data-field" data-key="wpt" contenteditable="true"></span> AXIS: <span class="data-field" data-key="axis" contenteditable="true"></span> <span class="data-field checkbox-custom" data-key="axisTypeL"></span> L <span class="data-field checkbox-custom" data-key="axisTypeR"></span> R<br>
-                SPEED: <span class="data-field" data-key="speed" contenteditable="true"></span> QNH: <span class="data-field" data-key="qnh" contenteditable="true"></span> ATIS: <span class="data-field" data-key="atis" contenteditable="true"></span><br>
-                ALT Ldr: <span class="data-field" data-key="altLdr" contenteditable="true"></span> Wn: <span class="data-field" data-key="wn" contenteditable="true"></span><br>
-                Coord: <span class="data-field" data-key="coord" contenteditable="true"></span><br>
-                Outbound leg = <span class="data-field" data-key="outboundLeg" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateTacticsJoinPackageR">
-        <div class="bloc bloc-tactics-joinpackage" data-bloc-id="tacticsJoinPackage">
-            <div class="bloc-titre" contenteditable="true">JOIN PACKAGE</div>
-            <div class="bloc-content" data-content-type="structured">
-                JOIN AT <span class="data-field" data-key="joinSpeed" contenteditable="true"></span><br>
-                ALTITUDE CUJ21/22 = <span class="data-field" data-key="alt2122" contenteditable="true"></span><br>
-                ALTITUDE CUJ23/24 = <span class="data-field" data-key="alt2324" contenteditable="true"></span><br>
-                BENO LINE = <span class="data-field" data-key="benoLine" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateTacticsIngressR">
-        <div class="bloc bloc-tactics-ingress" data-bloc-id="tacticsIngress">
-            <div class="bloc-titre" contenteditable="true">INGRESS <span style="font-size:0.8em; font-weight:normal;">(Assembly / Geometry / Profile / Speed / Fence IN / Checkin)</span></div>
-            <div class="bloc-content" data-content-type="structured">
-                PUSH AT <span class="data-field" data-key="pushSpeed" contenteditable="true"></span> / <span class="data-field" data-key="pushAlt" contenteditable="true"></span> / <span class="data-field" data-key="pushFormation" contenteditable="true"></span> / sequence <span class="data-field" data-key="pushSeq" contenteditable="true"></span><br>
-                BE IN <span class="data-field" data-key="trailFormation" contenteditable="true"></span> <span class="data-field" data-key="trailAlt" contenteditable="true"></span> AT <span class="data-field" data-key="trailLoc" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateTargetsDzOneR">
-        <div class="bloc bloc-targets-dzone" data-bloc-id="targetsDzOne">
-            <div class="bloc-titre" contenteditable="true">TARGETS <span style="font-size:0.8em; font-weight:normal;">DZ PRIM 1: DZ ONE <span class="data-field" data-key="dzName" contenteditable="true"></span> <span class="data-field" data-key="bulls" contenteditable="true"></span></span></div>
-            <div class="bloc-content" data-content-type="structured">
-                TYPE: <span class="data-field" data-key="type" contenteditable="true"></span> C/S: <span class="data-field" data-key="cs" contenteditable="true"></span><br>
-                AXIS: <span class="data-field" data-key="axisDegT" contenteditable="true"></span>°T / <span class="data-field" data-key="axisDegM" contenteditable="true"></span> ELEV: <span class="data-field" data-key="elevation" contenteditable="true"></span><br>
-                SD: <span class="data-field" data-key="sd" contenteditable="true"></span> MARKING: <span class="data-field" data-key="marking" contenteditable="true"></span><span class="data-field" data-key="markingType" contenteditable="true" style="min-width:1em;"></span><br>
-                SPEED: <span class="data-field" data-key="speed" contenteditable="true"></span> ALT: <span class="data-field" data-key="altitude" contenteditable="true"></span> QNH: <span class="data-field" data-key="qnh" contenteditable="true"></span> PREP: <span class="data-field" data-key="prep" contenteditable="true"></span><br>
-                ESCAPE: <span class="data-field" data-key="escapeDir" contenteditable="true"></span>/<span class="data-field" data-key="escapeHead" contenteditable="true"></span> REATTACK: <span class="data-field" data-key="reattackDir" contenteditable="true"></span><br>
-                sequence <span class="data-field" data-key="seq" contenteditable="true"></span> max wind = <span class="data-field" data-key="maxWind" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-    <!-- Ajoutez ici les templates pour DZ VANNES, LZ RENNES, DZ LFOE sur le modèle de DZ ONE -->
-
-    <template id="templateWhatIfsSafetyR">
-        <div class="bloc bloc-whatifs-safety" data-bloc-id="whatIfsSafety">
-            <div class="bloc-titre" contenteditable="true">8. WHAT IFS + SAFETY</div>
-            <div class="bloc-content" data-content-type="structured">
-                IWP <span class="data-field" data-key="iwp" contenteditable="true"></span> ESA <span class="data-field" data-key="esa" contenteditable="true"></span><br>
-                CONTIGENCIES <span style="font-size:0.8em; font-weight:normal;">(FALLOUT/LATE COMER/RE-ATTACK/WX/...)</span><br><span class="data-field" data-key="contingencies" contenteditable="true" style="display:block; min-height: 3em;"></span><br>
-                TACTICAL WHAT Ifs <span style="font-size:0.8em; font-weight:normal;">(MDCOA/BACK-UP OPTIONS/...)</span><br><span class="data-field" data-key="tacticalWhatifs" contenteditable="true" style="display:block; min-height: 3em;"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <!-- ==== TEMPLATES HTML POUR LES BLOCS (VERSO) ==== -->
-    <template id="templateMissionCodewordsV">
-        <div class="bloc bloc-mission-codewords" data-bloc-id="missionCodewords">
-            <div class="bloc-titre" contenteditable="true">MISSION CODEWORDS</div>
-            <div class="bloc-content" data-content-type="structured">
-                SLIP: <span class="data-field" data-key="slip" contenteditable="true"></span> TAT: <span class="data-field" data-key="tat" contenteditable="true"></span>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-
-    <template id="templateGeneralCodewordsV">
-         <div class="bloc bloc-general-codewords" data-bloc-id="generalCodewords">
-            <div class="bloc-titre" contenteditable="true">DAY - GENERAL CODEWORDS</div>
-            <div class="bloc-content" data-content-type="table">
-                <table data-table-id="generalCodewords"> <!-- Ajout d'un ID pour addTableRow -->
-                    <tbody>
-                        <tr><td><span contenteditable="true">MSN SUCCESSFUL</span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td></tr>
-                        <tr><td><span contenteditable="true">MSN UNSUCCESSFUL</span></td><td><span contenteditable="true"></span></td><td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td></tr>
-                        <!-- Ajoutez d'autres lignes de codewords ici -->
-                    </tbody>
-                </table>
-                <div class="table-actions no-print"><button class="add-row-btn" data-table-ref="generalCodewords">Ajouter Codeword</button></div>
-            </div>
-            <div class="bloc-actions">
-                <button data-action="export">Exporter</button>
-                <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
-            </div>
-        </div>
-    </template>
-    <!-- Ajoutez les autres templates pour le VERSO ici -->
-
-
-    <script src="script.js"></script>
+    <script src="app.js" type="module"></script>
 </body>
 </html>

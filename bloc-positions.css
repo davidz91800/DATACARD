@@ -1,0 +1,55 @@
+/* == STYLES DE POSITIONNEMENT SPÉCIFIQUES AUX BLOCS == */
+/* --- RECTO - VOLET GAUCHE --- */
+.bloc-msn-objective { top: 3mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; }
+.bloc-domestics { top: 20.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 12mm; }
+.bloc-support { top: 33mm; left: 2.5mm; width: calc(100% - 5mm); height: 13mm; }
+.bloc-comladder { top: 46.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 67mm; }
+.bloc-timeline { top: 114mm; left: 2.5mm; width: calc(100% - 5mm); height: 62mm; }
+.bloc-external-contracts { top: 176.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; }
+.bloc-element-package-contracts { top: 190.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; }
+
+/* --- RECTO - VOLET DROIT --- */
+.bloc-tactics-header { top: 3mm; left: 2.5mm; width: calc(100% - 5mm); height: 15mm; }
+
+/* Blocs HOLD - 3 sur une ligne, largeurs égales */
+/* Largeur totale disponible pour les 3 blocs = 100% (du volet) - 5mm (padding gauche+droit du volet) = calc(100% - 5mm) */
+/* Espace total pour les espacements = 2 * 1mm (ESPACE_ENTRE_BLOCS_MM) = 2mm */
+/* Largeur nette pour les 3 blocs = calc(100% - 5mm - 2mm) = calc(100% - 7mm) */
+/* Largeur de chaque bloc HOLD = calc((100% - 7mm) / 3) */
+.bloc-tactics-hold1 {
+    top: 18.5mm;
+    left: 2.5mm; /* Alignement avec padding gauche du volet */
+    width: calc((100% - 7mm) / 3);
+    height: 26.5mm;
+}
+.bloc-tactics-hold2 {
+    top: 18.5mm;
+    left: calc(2.5mm + ((100% - 7mm) / 3) + 1mm); /* Position après HOLD1 + 1mm d'espace */
+    width: calc((100% - 7mm) / 3);
+    height: 26.5mm;
+}
+.bloc-tactics-hold3 {
+    top: 18.5mm;
+    /* Position après HOLD2 + 1mm d'espace: left de HOLD2 + largeur de HOLD2 + 1mm d'espace */
+    left: calc(2.5mm + ((100% - 7mm) / 3) + 1mm + ((100% - 7mm) / 3) + 1mm);
+    /* Simplifié: left: calc(2.5mm + 2 * (((100% - 7mm) / 3) + 1mm)); */
+    width: calc((100% - 7mm) / 3);
+    height: 26.5mm;
+}
+
+.bloc-tactics-ingress {
+    top: 45.5mm; /* Doit être après les blocs HOLD */
+    left: 2.5mm;
+    width: calc(100% - 5mm);
+    height: 20mm;
+}
+
+.bloc-targets-dzone { top: 66mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-dzvannes { top: 103.5mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-lzrennes { top: 66mm; left: calc(50% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-targets-dzlfoe { top: 103.5mm; left: calc(50% + 1mm); width: calc(48% - 3.5mm); height: 37mm; }
+.bloc-whatifs-safety { top: 141mm; left: 2.5mm; width: calc(100% - 5mm); height: 45mm; }
+
+/* --- VERSO --- */
+.bloc-mission-codewords { top: 3mm; left: 2.5mm; width: calc(48% - 3.5mm); height: 10mm; }
+.bloc-general-codewords { top: 15mm; left: 2.5mm; width: calc(100% - 5mm); height: 60mm; }

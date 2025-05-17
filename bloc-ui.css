@@ -1,0 +1,224 @@
+/* Styles pour .data-field, .checkbox-custom, .bloc-actions */
+.data-field[contenteditable="true"] {
+    display: inline-block;
+    min-width: 8mm; /* Largeur minimale pour faciliter la sélection */
+    padding: 0 0.5mm;
+    border-bottom: 0.2mm dotted #99aacc;
+    background-color: #f8faff;
+    line-height: 1.2; /* Pour éviter que le texte ne soit trop collé à la bordure */
+}
+.data-field[contenteditable="true"]:empty::before {
+    content: "..."; /* Placeholder pour champs vides */
+    color: #aaa;
+    font-style: italic;
+    display: inline-block; /* Pour que le placeholder soit visible */
+}
+.data-field[contenteditable="true"]:focus {
+    border-bottom: 0.3mm solid #2d396b;
+    background-color: #e8f0fe;
+    outline: none;
+}
+
+/* Style pour les select .data-field */
+select.data-field {
+    padding: 0.3mm 0.5mm;
+    border: 0.2mm solid #ccc;
+    border-radius: 0.5mm;
+    background-color: #f0f0f0;
+    min-width: 8mm; /* Minimum width pour le select */
+    line-height: 1.2;
+    font-family: inherit; /* Hériter la police du parent */
+    font-size: inherit;   /* Hériter la taille de police du parent */
+    box-sizing: border-box;
+    appearance: none; /* Enlever le style par défaut du select, si on veut le customiser plus tard */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27292.4%27%20height%3D%27292.4%27%3E%3Cpath%20fill%3D%27%23007CB2%27%20d%3D%27M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.4-5.4-13z%27%2F%3E%3C%2Fsvg%3E"); /* Flèche de base */
+    background-repeat: no-repeat;
+    background-position: right 0.5mm center;
+    background-size: 0.6em;
+    padding-right: 1.5em; /* Espace pour la flèche */
+}
+select.data-field:focus {
+    border-color: #2d396b;
+    background-color: #e8f0fe;
+    outline: 0.5mm dashed #2d396b;
+}
+
+
+.checkbox-custom { /* Peut toujours être utilisé ailleurs, donc on le garde */
+    display: inline-block;
+    width: 2.5mm; height: 2.5mm;
+    border: 0.3mm solid #333;
+    text-align: center;
+    cursor: pointer;
+    line-height: 2.2mm; /* Ajuster pour centrer le X */
+    user-select: none;
+    vertical-align: middle;
+    margin: 0 0.5mm;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.checkbox-custom[data-checked="true"]::before {
+    content: "X";
+    color: #1c3a8e;
+}
+.checkbox-custom:focus {
+    outline: 0.5mm dashed #2d396b;
+    border-color: #2d396b;
+}
+
+.notes-field { /* Style spécifique pour le champ Notes */
+    border: 0.2mm solid #99aacc; /* Bordure visible comme les autres data-fields */
+    background-color: #f8faff; /* Fond comme les autres data-fields */
+    padding: 0.5mm; /* Un peu de padding interne */
+    line-height: 1.3;
+    overflow-y: auto; /* Permet le défilement si le contenu dépasse */
+    text-align: left; /* Texte aligné à gauche */
+    white-space: pre-wrap; /* Respecte les retours à la ligne et espaces multiples */
+    word-wrap: break-word; /* Coupe les mots longs */
+}
+.notes-field:empty::before { /* Placeholder pour le champ notes */
+    content: "Notes...";
+    color: #aaa;
+    font-style: italic;
+    display: inline-block;
+}
+.notes-field:focus {
+    border-color: #2d396b;
+    background-color: #e8f0fe;
+    outline: none;
+}
+
+
+/* Ajuster le comportement des data-fields dans les blocs HOLD pour la grille */
+.bloc[data-bloc-id^="tacticsHold"] .bloc-content .data-field:not(.notes-field) { /* Exclure notes-field des styles de largeur 100% des champs sur une seule ligne */
+    width: 100%; 
+    box-sizing: border-box; 
+}
+.bloc[data-bloc-id^="tacticsHold"] .bloc-content .notes-field {
+    width: auto; /* Laisse la grille gérer la largeur (grid-column: 1 / 5) */
+    /* min-height est dans le style inline du HTML */
+}
+
+.bloc-actions {
+    position: absolute;
+    bottom: 0.5mm;
+    right: 1mm;
+    display: flex;
+    gap: 0.8mm;
+    z-index: 7; /* Au-dessus des poignées de redimensionnement */
+    flex-shrink: 0;
+}
+
+.bloc-actions button, .bloc-actions .button-like-label {
+    font-size: 0.7em;
+    padding: 0.4mm 1.2mm;
+    border-radius: 0.8mm;
+    background: #5c6f9a;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    opacity: 0.15;
+    transition: opacity 0.25s ease-in-out;
+}
+.bloc:hover .bloc-actions button,
+.bloc:hover .bloc-actions .button-like-label {
+    opacity: 1;
+}
+.bloc-actions input[type="file"] { display: none; }
+
+
+/* --- STYLES SPÉCIFIQUES POUR LES BLOCS HOLD --- */
+.bloc[data-bloc-id^="tacticsHold"] {
+    container-type: inline-size; /* Déclarer le bloc comme conteneur de requête pour sa largeur */
+    container-name: tactics-hold-bloc; /* Donner un nom au conteneur */
+}
+
+/*
+La structure grid (display, grid-template-columns, gap, padding)
+est définie dans le style inline des templates HTML des blocs HOLD
+pour permettre une configuration fine par template si nécessaire.
+*/
+
+.hold-label { /* Styles pour les labels fixes comme WPT, AXIS, etc. dans les blocs HOLD */
+    font-weight: bold;
+    white-space: nowrap; /* Empêche le retour à la ligne du label */
+    text-align: left;
+    /* La taille de la police s'adapte avec celle du .bloc-content parent (via container queries) */
+}
+
+/* SUPPRESSION de .axis-lr-group et .lr-selector car remplacés par <select> */
+/*
+.axis-lr-group { 
+    display: flex;
+    align-items: center;
+    gap: 0.5mm; 
+}
+.axis-lr-group .data-field { 
+    flex-grow: 1; 
+    min-width: 5mm;
+}
+
+.lr-selector {
+    padding: 0.3mm 0.8mm; 
+    border: 0.2mm solid #ccc;
+    border-radius: 0.5mm;
+    cursor: pointer;
+    user-select: none; 
+    text-align: center;
+    min-width: 3mm; 
+    font-weight: bold;
+    background-color: #f0f0f0; 
+    color: #555; 
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.lr-selector[data-selected="true"] {
+    background-color: #2d396b;
+    color: white; 
+    border-color: #2d396b; 
+}
+.lr-selector:not([data-selected="true"]):hover {
+    background-color: #e0e4e8; 
+}
+.lr-selector:focus { 
+    outline: 0.5mm dashed #2d396b;
+}
+*/
+
+/* Ajuster le comportement des data-fields dans les blocs HOLD pour la grille */
+.bloc[data-bloc-id^="tacticsHold"] .bloc-content .data-field,
+.bloc[data-bloc-id^="tacticsHold"] .bloc-content select.data-field { /* Inclure select.data-field */
+    width: 100%; /* Permet au data-field de remplir la cellule de la grille (celles en '1fr') */
+    box-sizing: border-box; /* Important si padding/border est sur le data-field lui-même */
+    /* min-width est géré par la classe .data-field globale ou par des styles inline si besoin */
+}
+
+
+/* --- CONTAINER QUERIES POUR LA FONT-SIZE DANS LES BLOCS HOLD --- */
+/* La font-size de base du .bloc-content est 0.95em (relative au .bloc: 2.8mm), soit ~2.66mm */
+/* Nous commençons avec une police un peu plus petite pour les blocs HOLD. */
+
+@container tactics-hold-bloc (width > 0px) { /* S'applique dès que le conteneur a une largeur */
+    .bloc[data-bloc-id^="tacticsHold"] .bloc-content {
+        font-size: 0.85em; /* ~2.38mm. À ajuster selon les besoins. */
+    }
+}
+@container tactics-hold-bloc (max-width: 48mm) { /* Seuil pour un bloc HOLD un peu plus étroit */
+    .bloc[data-bloc-id^="tacticsHold"] .bloc-content {
+        font-size: 0.80em; /* ~2.24mm */
+    }
+}
+@container tactics-hold-bloc (max-width: 42mm) {
+    .bloc[data-bloc-id^="tacticsHold"] .bloc-content {
+        font-size: 0.72em; /* ~2.0mm */
+    }
+}
+@container tactics-hold-bloc (max-width: 36mm) {
+    .bloc[data-bloc-id^="tacticsHold"] .bloc-content {
+        font-size: 0.65em; /* ~1.82mm */
+    }
+}
+@container tactics-hold-bloc (max-width: 30mm) { /* Pour des blocs HOLD très étroits */
+    .bloc[data-bloc-id^="tacticsHold"] .bloc-content {
+        font-size: 0.58em; /* ~1.62mm. La lisibilité peut devenir un enjeu ici. */
+    }
+}

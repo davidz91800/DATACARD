@@ -1,0 +1,34 @@
+<div class="bloc bloc-tactics-hold2" data-bloc-id="tacticsHold2">
+    <div class="bloc-titre" contenteditable="true">HOLD 2</div>
+    <div class="bloc-content" data-content-type="structured" style="display: grid; grid-template-columns: min-content 1fr min-content 1fr; grid-template-rows: auto auto auto auto 1fr; /* Dernière ligne prend l'espace restant */ gap: 0.8mm 1.5mm; align-items: center; padding: 1.5mm;">
+        <!-- Ligne 1 -->
+        <span class="hold-label">WPT</span> <span class="data-field" data-key="wpt1" contenteditable="true"></span>
+        <span class="hold-label">AXIS</span>
+        <div style="display: flex; align-items: center; gap: 0.5mm;"> <!-- Conteneur pour AXIS field et select -->
+            <span class="data-field" data-key="axis1" contenteditable="true" style="flex-grow: 1; min-width: 5mm;"></span>
+            <select class="data-field" data-key="axisType1" style="padding: 0.3mm 0.5mm; border: 0.2mm solid #ccc; border-radius: 0.5mm; background-color: #f0f0f0; min-width: 8mm;">
+                <option value="L">L</option>
+                <option value="R">R</option>
+            </select>
+        </div>
+
+        <!-- Ligne 2 -->
+        <span class="hold-label">SPEED</span> <span class="data-field" data-key="speed1" contenteditable="true"></span>
+        <span class="hold-label">QNH</span> <span class="data-field" data-key="qnh_atis1" contenteditable="true"></span>
+
+        <!-- Ligne 3 -->
+        <span class="hold-label">ALT</span> <span class="data-field" data-key="altLdr1" contenteditable="true"></span>
+        <span class="hold-label">Wn</span> <span class="data-field" data-key="wn1" contenteditable="true"></span>
+
+        <!-- Ligne 4 -->
+        <span class="hold-label" style="grid-column: 1 / 2;">Coord</span>
+        <span class="data-field" data-key="coord1" contenteditable="true" style="grid-column: 2 / 5;"></span>
+
+        <!-- Ligne 5 (Notes) - Prend toute la largeur et la hauteur restante -->
+        <div class="data-field notes-field" data-key="notes1" contenteditable="true" style="grid-column: 1 / 5; align-self: stretch; min-height: 10mm; /* Hauteur minimale pour le champ notes */"></div>
+    </div>
+    <div class="bloc-actions">
+        <button data-action="export">Exporter</button>
+        <label class="button-like-label">Importer<input type="file" accept=".json" data-action="import"></label>
+    </div>
+</div>
