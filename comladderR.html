@@ -1,35 +1,97 @@
 <div class="bloc bloc-comladder" data-bloc-id="comladder">
-    <div class="bloc-titre">5. COMLADDER <span style="float:right;">COMPLAN VERSION : <span class="data-field" data-key="complanVersion" contenteditable="true"></span></span></div>
+    <div class="bloc-titre">
+        5. COMLADDER
+        <span class="comladder-subtitle">MANDATORY CALLS/COMSHARING/PARROT/TIMBER/CODEWORDS</span>
+        <span style="float:right;">COMPLAN VERSION : <span class="data-field" data-key="complanVersion" contenteditable="true"></span></span>
+    </div>
     <div class="bloc-content" data-content-type="table">
         <table class="comladder-table">
             <thead>
                 <tr>
-                    <th rowspan="2">LINE</th><th rowspan="2">PHASE</th>
-                    <th colspan="4">BOX 1</th> <th colspan="4">BOX 2</th>
-                    <th colspan="4">BOX 3</th> <th colspan="4">BOX 4</th>
+                    <th rowspan="2">LINE</th>
+                    <th rowspan="2">PHASE</th>
+                    <th colspan="4">BOX 1</th>
+                    <th colspan="4">BOX 2</th>
+                    <th colspan="4">BOX 3</th>
+                    <th colspan="4">BOX 4</th>
+                    <th rowspan="2" class="no-print"></th> <!-- Colonne pour boutons supprimer -->
                 </tr>
                 <tr>
-                    <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
-                    <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
-                    <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
-                    <th>PST</th><th>FREQ</th><th>X</th><th>PRM/SEC</th>
+                    <th>PST</th><th>FREQUENCY</th><th>X</th><th>PRM/SEC</th>
+                    <th>PST</th><th>FREQUENCY</th><th>X</th><th>PRM/SEC</th>
+                    <th>PST</th><th>FREQUENCY</th><th>X</th><th>PRM/SEC</th>
+                    <th>PST</th><th>FREQUENCY</th><th>X</th><th>PRM/SEC</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Ligne 1: EGRESS -->
                 <tr>
-                    <td><span contenteditable="true">1</span></td> <td><span contenteditable="true">EGRESS</span></td>
-                    <td><span contenteditable="true">X</span></td><td><span contenteditable="true">123.45/345,67</span></td><td><span class="data-field checkbox-custom" data-key="b1l1x"></span></td><td><span contenteditable="true">X</span></td>
-                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true">123.45/345,67</span></td><td><span class="data-field checkbox-custom" data-key="b2l1x"></span></td><td><span contenteditable="true">X</span></td>
-                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true">123.45/345,67</span></td><td><span class="data-field checkbox-custom" data-key="b3l1x"></span></td><td><span contenteditable="true">X</span></td>
-                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true">339,725</span></td><td><span class="data-field checkbox-custom" data-key="b4l1x"></span></td><td><span contenteditable="true">AUTO INFO</span></td>
+                    <td><span contenteditable="true">1</span></td>
+                    <td><span contenteditable="true">EGRESS</span></td>
+                    <td><span contenteditable="true">X</span></td><td><span contenteditable="true">PRM/SECONDARY</span></td><td><span class="data-field checkbox-custom" data-key="b1l1x"></span></td><td><span contenteditable="true">TYPE</span></td>
+                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true">PRM/SECONDARY</span></td><td><span class="data-field checkbox-custom" data-key="b2l1x"></span></td><td><span contenteditable="true">TYPE</span></td>
+                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true">PRM/SECONDARY</span></td><td><span class="data-field checkbox-custom" data-key="b3l1x"></span></td><td><span contenteditable="true">TYPE</span></td>
+                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true">PRM/SECONDARY</span></td><td><span class="data-field checkbox-custom" data-key="b4l1x"></span></td><td><span contenteditable="true">TYPE</span></td>
                     <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
                 </tr>
-                 <tr>
-                    <td><span contenteditable="true">2</span></td> <td><span contenteditable="true">EXEMPLE</span></td>
-                    <td><span contenteditable="true">NS</span></td><td><span contenteditable="true">ATC</span></td><td><span class="data-field checkbox-custom" data-key="b1l2x"></span></td><td><span contenteditable="true">SA</span></td>
-                    <td><span contenteditable="true">TACTICAL</span></td><td><span contenteditable="true">A</span></td><td><span class="data-field checkbox-custom" data-key="b2l2x"></span></td><td><span contenteditable="true">I/P</span></td>
-                    <td><span contenteditable="true">NS</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b3l2x"></span></td><td><span contenteditable="true"></span></td>
-                    <td><span contenteditable="true"></span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b4l2x"></span></td><td><span contenteditable="true"></span></td>
+                <!-- Ligne 2: EXEMPLE -->
+                <tr>
+                    <td><span contenteditable="true">2</span></td>
+                    <td><span contenteditable="true">EXEMPLE</span></td>
+                    <td><span contenteditable="true">NS</span></td><td><span contenteditable="true">ATC</span></td><td><span class="data-field checkbox-custom" data-key="b1l2x"></span></td><td><span contenteditable="true">123.45/345,67</span></td>
+                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true">TACTICAL</span></td><td><span class="data-field checkbox-custom" data-key="b2l2x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true">I/P</span></td><td><span class="data-field checkbox-custom" data-key="b3l2x"></span></td><td><span contenteditable="true"></span></td>
+                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true">339,725</span></td><td><span class="data-field checkbox-custom" data-key="b4l2x"></span></td><td><span contenteditable="true">AUTO INFO</span></td>
+                    <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
+                </tr>
+                <!-- Ligne 3: HOLD -->
+                <tr>
+                    <td><span contenteditable="true">3</span></td>
+                    <td><span contenteditable="true">HOLD</span></td>
+                    <td><span contenteditable="true">X</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b1l3x"></span></td><td><span contenteditable="true">SA</span></td>
+                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b2l3x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b3l3x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b4l3x"></span></td><td><span contenteditable="true">NS</span></td>
+                    <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
+                </tr>
+                <!-- Ligne 4: PUSH -->
+                <tr>
+                    <td><span contenteditable="true">4</span></td>
+                    <td><span contenteditable="true">PUSH</span></td>
+                    <td><span contenteditable="true">X</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b1l4x"></span></td><td><span contenteditable="true">SA</span></td>
+                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b2l4x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b3l4x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b4l4x"></span></td><td><span contenteditable="true">NS</span></td>
+                    <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
+                </tr>
+                <!-- Ligne 5: TARGET -->
+                <tr>
+                    <td><span contenteditable="true">5</span></td>
+                    <td><span contenteditable="true">TARGET</span></td>
+                    <td><span contenteditable="true">X</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b1l5x"></span></td><td><span contenteditable="true">SA</span></td>
+                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b2l5x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b3l5x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b4l5x"></span></td><td><span contenteditable="true">NS</span></td>
+                    <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
+                </tr>
+                <!-- Ligne 6: EGRESS -->
+                <tr>
+                    <td><span contenteditable="true">6</span></td>
+                    <td><span contenteditable="true">EGRESS</span></td>
+                    <td><span contenteditable="true">X</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b1l6x"></span></td><td><span contenteditable="true">SA</span></td>
+                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b2l6x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b3l6x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b4l6x"></span></td><td><span contenteditable="true">NS</span></td>
+                    <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
+                </tr>
+                <!-- Ligne 7: RECOVERY -->
+                <tr>
+                    <td><span contenteditable="true">7</span></td>
+                    <td><span contenteditable="true">RECOVERY</span></td>
+                    <td><span contenteditable="true">X</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b1l7x"></span></td><td><span contenteditable="true">SA</span></td>
+                    <td><span contenteditable="true">B45</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b2l7x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">G28</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b3l7x"></span></td><td><span contenteditable="true">A</span></td>
+                    <td><span contenteditable="true">R5</span></td><td><span contenteditable="true"></span></td><td><span class="data-field checkbox-custom" data-key="b4l7x"></span></td><td><span contenteditable="true">NS</span></td>
                     <td class="no-print"><button class="remove-row-btn" title="Supprimer ligne">-</button></td>
                 </tr>
             </tbody>

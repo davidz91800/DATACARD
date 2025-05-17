@@ -6,7 +6,7 @@
     position: absolute;
     box-sizing: border-box;
     padding: 1mm 1.5mm;
-    font-size: 2.8mm; /* Environ 8pt, à ajuster */
+    font-size: 2.8mm; /* Environ 8pt, à adjuster */
     overflow: hidden; /* Le bloc lui-même cache ce qui dépasse sa propre frame */
     display: flex;
     flex-direction: column;
@@ -27,6 +27,19 @@
     background-color: #e8f0fe;
     outline: 0.5mm dashed #2d396b;
 }
+
+/* Style pour le sous-titre spécifique au bloc COMLADDER */
+.comladder-subtitle {
+    font-size: 0.8em; /* Plus petit que le titre principal */
+    font-weight: normal; /* Police normale, pas en gras */
+    color: #4a5568; /* Couleur un peu plus claire, à ajuster */
+    margin: 0 0.8mm; /* Espace autour du sous-titre */
+    display: inline-block; /* Pour qu'il reste sur la même ligne que "5. COMLADDER" */
+    vertical-align: middle; /* Meilleur alignement vertical avec le texte principal */
+    /* max-width: 50%; /* Pour éviter qu'il ne prenne trop de place et ne pousse COMPLAN trop loin sur les petits écrans */
+    /* text-align: center; /* Si on veut le centrer par rapport à l'espace qu'il occupe */
+}
+
 
 .bloc-content {
     flex-grow: 1; /* Prend l'espace vertical restant */

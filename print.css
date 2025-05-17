@@ -1,27 +1,27 @@
 /* Styles spécifiques pour l'impression */
 @page {
     size: A4 landscape;
-    margin: 0mm !important; 
+    margin: 0mm !important;
 }
 
 @media print {
-    html, body { 
-        background: #fff !important; 
+    html, body {
+        background: #fff !important;
         margin: 0 !important; /* Forcer margin 0 */
         padding: 0 !important; /* Forcer padding 0 */
-        font-size: 8pt; 
-        -webkit-print-color-adjust: exact !important; 
-        print-color-adjust: exact !important; 
+        font-size: 8pt;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     /* Cacher les éléments non désirés à l'impression */
-    .global-actions, .no-print, .resize-handle, .bloc-actions, 
-    .table-actions, .page-identifier, .pliage-indic { 
-        display: none !important; 
+    .global-actions, .no-print, .resize-handle, .bloc-actions,
+    .table-actions, .page-identifier, .pliage-indic {
+        display: none !important;
     }
 
-    .datacard-viewer { 
-        display: block !important; 
+    .datacard-viewer {
+        display: block !important;
         margin: 0 !important; /* Assurer pas de marge pour le conteneur principal */
         padding: 0 !important; /* Assurer pas de padding pour le conteneur principal */
         width: auto !important;
@@ -29,99 +29,99 @@
     }
 
     .page {
-        display: block !important; 
-        border: none !important; 
+        display: block !important;
+        border: none !important;
         box-shadow: none !important;
-        width: 297mm !important; 
+        width: 297mm !important;
         height: 210mm !important;
-        page-break-after: always; 
-        overflow: hidden !important; 
-        position: relative !important; 
+        page-break-after: always;
+        overflow: hidden !important;
+        position: relative !important;
         box-sizing: border-box !important;
         margin-top: 0 !important; /* S'assurer qu'aucune marge supérieure n'est appliquée à la page elle-même */
         padding-top: 0 !important; /* S'assurer qu'aucun padding supérieur n'est appliqué à la page elle-même */
     }
-    .page:last-child { 
-        page-break-after: avoid !important; 
+    .page:last-child {
+        page-break-after: avoid !important;
     }
 
     .a5-volet {
-        width: 50% !important; 
-        height: 100% !important; 
-        position: absolute !important; 
+        width: 50% !important;
+        height: 100% !important;
+        position: absolute !important;
         top: 0 !important;
-        padding: 2mm !important; 
+        padding: 2mm !important;
         box-sizing: border-box !important;
-        overflow: hidden !important; 
+        overflow: hidden !important;
     }
     #voletGaucheRecto, #voletGaucheVerso { left: 0; }
     #voletDroitRecto, #voletDroitVerso { right: 0; }
 
-    .page > .a5-volet:first-of-type { 
+    .page > .a5-volet:first-of-type {
         border-right: 0.4mm dashed #333 !important;
     }
 
-    .bloc { 
-        border: 0.25mm solid #000 !important; 
-        color: #000 !important; 
-        border-radius: 0.5mm !important; 
-        position: absolute !important; 
-        overflow: hidden !important; 
-        display: flex !important; 
+    .bloc {
+        border: 0.25mm solid #000 !important;
+        color: #000 !important;
+        border-radius: 0.5mm !important;
+        position: absolute !important;
+        overflow: hidden !important;
+        display: flex !important;
         flex-direction: column !important;
         box-sizing: border-box !important;
     }
 
-    .bloc-titre { 
-        color: #000 !important; 
+    .bloc-titre {
+        color: #000 !important;
         border-bottom: 0.15mm solid #333 !important;
-        background-color: #f0f0f0 !important; 
-        flex-shrink: 0 !important; 
-        padding: 0.5mm !important; 
+        background-color: #f0f0f0 !important;
+        flex-shrink: 0 !important;
+        padding: 0.5mm !important;
         line-height: 1.2 !important;
         box-sizing: border-box !important;
     }
     .bloc-titre span[style*="float:right"] {
         float: right !important;
-        display: inline-block !important; 
+        display: inline-block !important;
     }
 
-    .bloc-content { 
-        background-color: transparent !important; 
-        flex-grow: 1 !important; 
-        min-height: 0 !important; 
+    .bloc-content {
+        background-color: transparent !important;
+        flex-grow: 1 !important;
+        min-height: 0 !important;
         box-sizing: border-box !important;
-        overflow-y: auto; 
+        overflow-y: auto;
     }
     .bloc-content table {
-        max-height: 100%; 
+        max-height: 100%;
     }
 
-    table { 
+    table {
         width: 100% !important;
         border-collapse: collapse !important;
-        font-size: 1em; 
-        display: table !important; 
-        table-layout: fixed !important; 
+        font-size: 1em;
+        display: table !important;
+        table-layout: fixed !important;
     }
     table thead { display: table-header-group !important; }
-    table tbody { 
-        display: table-row-group !important; 
+    table tbody {
+        display: table-row-group !important;
     }
     table tr    { display: table-row !important; }
 
-    table th, table td { 
-        border: 0.15mm solid #555 !important; 
-        padding: 0.3mm 0.4mm !important; 
-        text-align: center !important; 
-        vertical-align: middle !important; 
-        min-height: 0 !important; 
-        display: table-cell !important; 
-        overflow: hidden !important; 
-        text-overflow: ellipsis; 
+    table th, table td {
+        border: 0.15mm solid #555 !important;
+        padding: 0.3mm 0.4mm !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        min-height: 0 !important;
+        display: table-cell !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
         overflow-wrap: break-word !important;
-        word-break: break-word !important; 
-        font-size: 0.9em; 
+        word-break: break-word !important;
+        font-size: 0.9em;
     }
     .comladder-table th:nth-child(1), .comladder-table td:nth-child(1) { width: 30px !important; }
     .comladder-table th:nth-child(2), .comladder-table td:nth-child(2) { width: 50px !important; }
@@ -138,26 +138,25 @@
         font-size: 0.85em !important;
     }
 
-    .data-field[contenteditable="true"] { 
-        border-bottom: none !important; 
-        background-color: transparent !important; 
-        padding: 0 !important; 
-        min-width: auto !important; 
-        display: inline !important; 
+    .data-field[contenteditable="true"] {
+        border-bottom: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+        min-width: auto !important;
+        display: inline !important;
     }
-    .data-field[contenteditable="true"]:empty::before { 
-        content: "" !important; 
+    .data-field[contenteditable="true"]:empty::before {
+        content: "" !important;
     }
-    .data-field.notes-field[contenteditable="true"], 
-    div.data-field[data-key="missionObjectiveText"] { 
-        display: block !important; 
-        border: 0.1mm dotted #ccc !important; 
+    .data-field.notes-field[contenteditable="true"] {
+        display: block !important;
+        border: 0.1mm dotted #ccc !important;
         padding: 0.5mm !important;
-        min-height: 3mm !important; 
-        width: 100% !important; 
-        height: 100% !important; 
+        min-height: 3mm !important;
+        width: 100% !important;
+        height: 100% !important;
         box-sizing: border-box !important;
-        overflow: auto !important; 
+        overflow: auto !important;
     }
     select.data-field {
         border: 0.1mm solid #777 !important;
@@ -166,39 +165,39 @@
         -webkit-appearance: none !important;
         -moz-appearance: none !important;
         padding-right: 0 !important;
-        padding-left: 0.5mm !important; 
-        font-size: inherit !important; 
-        display: inline-block !important; 
+        padding-left: 0.5mm !important;
+        font-size: inherit !important;
+        display: inline-block !important;
     }
 
-    .bloc-content[contenteditable="true"]:focus, 
+    .bloc-content[contenteditable="true"]:focus,
     .bloc-titre[contenteditable="true"]:focus,
-    td[contenteditable="true"]:focus, 
+    td[contenteditable="true"]:focus,
     td span[contenteditable="true"]:focus,
     .data-field[contenteditable="true"]:focus,
-    .classification-footer:focus { 
-        background-color: transparent !important; 
-        outline: none !important; 
+    .classification-footer:focus {
+        background-color: transparent !important;
+        outline: none !important;
     }
 
-    .checkbox-custom { 
-        border-color: #000 !important; 
+    .checkbox-custom {
+        border-color: #000 !important;
         display: inline-block !important;
         width: 2mm !important; height: 2mm !important; line-height: 1.8mm !important;
         vertical-align: middle;
     }
-    .checkbox-custom[data-checked="true"]::before { 
+    .checkbox-custom[data-checked="true"]::before {
         content: "X" !important;
-        color: #000 !important; 
+        color: #000 !important;
     }
 
-    .classification-footer { 
-        color: #000 !important; 
-        position: absolute !important; 
-        bottom: 1.5mm !important; 
-        left: 50% !important; 
-        transform: translateX(-50%) !important; 
-        font-size: 2.5mm !important; 
+    .classification-footer {
+        color: #000 !important;
+        position: absolute !important;
+        bottom: 1.5mm !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        font-size: 2.5mm !important;
         font-weight: bold !important;
     }
 }

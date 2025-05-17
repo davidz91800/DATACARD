@@ -2,11 +2,11 @@
 /* --- RECTO - VOLET GAUCHE --- */
 .bloc-msn-objective { top: 3mm; left: 2.5mm; width: calc(100% - 5mm); height: 17mm; }
 .bloc-domestics { top: 20.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 12mm; }
-.bloc-support { top: 33mm; left: 2.5mm; width: calc(100% - 5mm); height: 13mm; }
-.bloc-comladder { top: 46.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 67mm; }
-.bloc-timeline { top: 114mm; left: 2.5mm; width: calc(100% - 5mm); height: 62mm; }
-.bloc-external-contracts { top: 176.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; }
-.bloc-element-package-contracts { top: 190.5mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; }
+.bloc-support { top: 33mm; left: 2.5mm; width: calc(100% - 5mm); height: 6.6mm; } /* Hauteur réduite */
+.bloc-comladder { top: 40.1mm; left: 2.5mm; width: calc(100% - 5mm); height: 67mm; } /* Remonté de 6.4mm */
+.bloc-timeline { top: 107.6mm; left: 2.5mm; width: calc(100% - 5mm); height: 62mm; } /* Remonté de 6.4mm */
+.bloc-external-contracts { top: 170.1mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; } /* Remonté de 6.4mm */
+.bloc-element-package-contracts { top: 184.1mm; left: 2.5mm; width: calc(100% - 5mm); height: 13.5mm; } /* Remonté de 6.4mm */
 
 /* --- RECTO - VOLET DROIT --- */
 .bloc-tactics-header { top: 3mm; left: 2.5mm; width: calc(100% - 5mm); height: 15mm; }
