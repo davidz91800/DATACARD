@@ -1,24 +1,55 @@
 body {
     font-family: sans-serif;
+    margin: 0;
+    padding: 1rem;
+    background: #f0f0f0;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.container {
     max-width: 600px;
     margin: auto;
+    background: #fff;
     padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 form {
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
-ul {
+textarea {
+    resize: vertical;
+    min-height: 3rem;
+    padding: 0.5rem;
+}
+
+.prompt-list {
     list-style: none;
     padding: 0;
 }
 
-li {
+.prompt-item {
     display: flex;
     align-items: center;
-    margin-bottom: 0.5rem;
-    gap: 0.5rem;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.prompt-text {
+    flex: 1;
+    margin-right: 0.5rem;
+}
+
+.prompt-actions button {
+    margin-left: 0.25rem;
 }

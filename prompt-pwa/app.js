@@ -5,7 +5,11 @@ if ('serviceWorker' in navigator) {
 }
 
 function loadPrompts() {
-    return JSON.parse(localStorage.getItem('prompts') || '[]');
+    try {
+        return JSON.parse(localStorage.getItem('prompts')) || [];
+    } catch {
+        return [];
+    }
 }
 
 function savePrompts(prompts) {
@@ -17,7 +21,15 @@ function renderPrompts() {
     list.innerHTML = '';
     loadPrompts().forEach((prompt, index) => {
         const li = document.createElement('li');
-        li.textContent = prompt;
+        li.className = 'prompt-item';
+
+        const text = document.createElement('span');
+        text.className = 'prompt-text';
+        text.textContent = prompt;
+        text.addEventListener('click', () => navigator.clipboard.writeText(prompt));
+
+        const actions = document.createElement('span');
+        actions.className = 'prompt-actions';
 
         const copyBtn = document.createElement('button');
         copyBtn.textContent = 'Copier';
@@ -32,7 +44,8 @@ function renderPrompts() {
             renderPrompts();
         });
 
-        li.append(' ', copyBtn, ' ', deleteBtn);
+        actions.append(copyBtn, deleteBtn);
+        li.append(text, actions);
         list.appendChild(li);
     });
 }
@@ -43,7 +56,7 @@ document.getElementById('prompt-form').addEventListener('submit', e => {
     const value = input.value.trim();
     if (value) {
         const prompts = loadPrompts();
-        prompts.push(value);
+        prompts.unshift(value);
         savePrompts(prompts);
         input.value = '';
         renderPrompts();

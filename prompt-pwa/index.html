@@ -8,12 +8,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Prompt Manager</h1>
-    <form id="prompt-form">
-        <input type="text" id="prompt-input" placeholder="Nouveau prompt">
-        <button type="submit">Ajouter</button>
-    </form>
-    <ul id="prompt-list"></ul>
+    <header>
+        <h1>Prompt Manager</h1>
+    </header>
+    <main class="container">
+        <form id="prompt-form">
+            <textarea id="prompt-input" placeholder="Votre nouveau prompt"></textarea>
+            <button type="submit">Ajouter</button>
+        </form>
+        <ul id="prompt-list" class="prompt-list"></ul>
+    </main>
     <script src="app.js"></script>
 </body>
 </html>
