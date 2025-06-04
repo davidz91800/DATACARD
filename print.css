@@ -13,6 +13,9 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
+    *, *::before, *::after {
+        box-sizing: border-box !important;
+    }
 
     /* Cacher les éléments non désirés à l'impression */
     .global-actions, .no-print, .resize-handle, .bloc-actions,
@@ -20,8 +23,10 @@
         display: none !important;
     }
 
+    /* Utiliser la même structure flex qu'à l'écran */
     .datacard-viewer {
-        display: block !important;
+        display: flex !important;
+        flex-direction: column !important;
         margin: 0 !important; /* Assurer pas de marge pour le conteneur principal */
         padding: 0 !important; /* Assurer pas de padding pour le conteneur principal */
         width: auto !important;
@@ -29,7 +34,8 @@
     }
 
     .page {
-        display: block !important;
+        display: flex !important;
+        flex-direction: row !important;
         border: none !important;
         box-shadow: none !important;
         width: 297mm !important;
@@ -48,8 +54,7 @@
     .a5-volet {
         width: 50% !important;
         height: 100% !important;
-        position: absolute !important;
-        top: 0 !important;
+        position: relative !important;
         padding: 2mm !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
